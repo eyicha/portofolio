@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { profile, steps } from "@/data/profile";
 import { stack } from "@/data/stack";
 import { projects, type Project } from "@/data/projects";
@@ -10,6 +10,11 @@ import { Lightbox } from "./Chrome";
 
 export function Hero() {
   const [photoOk, setPhotoOk] = useState(true);
+  const img = useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    const el = img.current;
+    if (el && el.complete && el.naturalWidth === 0) setPhotoOk(false);
+  }, []);
   return (
     <section id="top" className="relative z-10 mx-auto max-w-6xl px-5 pb-10 pt-10 md:pt-16">
       <p className="text-center font-display text-lg italic text-mauve">Chapter One</p>
@@ -25,6 +30,7 @@ export function Hero() {
             <Wings className="animate-float absolute -inset-x-24 inset-y-0 z-0 h-full w-[calc(100%+12rem)] opacity-90" />
             {photoOk ? (
               <img
+                ref={img}
                 src={profile.photo}
                 alt="Portrait of Erisa Salsabila"
                 className="relative z-10 h-full w-full object-contain drop-shadow-[0_0_2px_var(--pearl)] drop-shadow-[0_0_10px_var(--pearl)]"
