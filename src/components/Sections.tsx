@@ -13,7 +13,10 @@ export function Hero() {
   const img = useRef<HTMLImageElement>(null);
   useEffect(() => {
     const el = img.current;
-    if (el && el.complete && el.naturalWidth === 0) setPhotoOk(false);
+    if (!el) return;
+    const t = new Image();
+    t.onerror = () => setPhotoOk(false);
+    t.src = el.currentSrc || el.src;
   }, []);
   return (
     <section id="top" className="relative z-10 mx-auto max-w-6xl px-5 pb-10 pt-10 md:pt-16">

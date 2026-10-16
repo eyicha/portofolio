@@ -129,7 +129,10 @@ export function SafeImage({ src, alt, className = "" }: { src: string; alt: stri
   const ref = useRef<HTMLImageElement>(null);
   useEffect(() => {
     const el = ref.current;
-    if (el && el.complete && el.naturalWidth === 0) setFailed(true);
+    if (!el) return;
+    const t = new Image();
+    t.onerror = () => setFailed(true);
+    t.src = el.currentSrc || el.src;
   }, []);
   if (failed || !src)
     return (
