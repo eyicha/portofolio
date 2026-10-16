@@ -8,7 +8,7 @@ export const Route = createFileRoute("/project/$slug")({
   loader: ({ params }) => {
     const i = projects.findIndex((p) => p.slug === params.slug);
     if (i < 0) throw notFound();
-    return { project: projects[i], next: projects[(i + 1) % projects.length] };
+    return { project: projects[i]!, next: projects[(i + 1) % projects.length]! };
   },
   head: ({ loaderData }) => {
     const t = loaderData ? `${loaderData.project.title} | Erisa Salsabila` : "Project | Erisa Salsabila";

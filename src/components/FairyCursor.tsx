@@ -31,7 +31,7 @@ export function FairyCursor() {
     resize();
     const spawn = (x: number, y: number, n: number, spread: number) => {
       for (let i = 0; i < n; i++)
-        ps.push({ x, y, vx: (Math.random() - 0.5) * spread, vy: (Math.random() - 0.5) * spread + 0.4, life: 1, c: colors[(Math.random() * 4) | 0], s: 1 + Math.random() * 2.5 });
+        ps.push({ x, y, vx: (Math.random() - 0.5) * spread, vy: (Math.random() - 0.5) * spread + 0.4, life: 1, c: colors[(Math.random() * 4) | 0]!, s: 1 + Math.random() * 2.5 });
     };
     const star = (x: number, y: number, r: number) => {
       ctx.beginPath();
@@ -45,7 +45,7 @@ export function FairyCursor() {
     const loop = () => {
       ctx.clearRect(0, 0, innerWidth, innerHeight);
       for (let i = ps.length - 1; i >= 0; i--) {
-        const p = ps[i];
+        const p = ps[i]!;
         p.x += p.vx; p.y += p.vy; p.life -= 0.02;
         if (p.life <= 0) { ps.splice(i, 1); continue; }
         ctx.globalAlpha = p.life;
