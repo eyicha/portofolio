@@ -62,6 +62,7 @@ export function Footer() {
       const t = setTimeout(() => setSent(false), 5000);
       return () => clearTimeout(t);
     }
+    return undefined;
   }, [sent]);
   const field = "w-full rounded-lg border bg-pearl/70 px-4 py-3 text-plum outline-none focus:border-rose focus:ring-2 focus:ring-rose/30";
   return (
