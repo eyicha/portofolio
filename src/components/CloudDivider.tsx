@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Cloud, Swan } from "./ornaments";
+import { Cloud, Swan, Sparkle } from "./illustrations";
 
 export function CloudDivider({ swan = false, flip = false, id = "a" }: { swan?: boolean; flip?: boolean; id?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -11,7 +11,9 @@ export function CloudDivider({ swan = false, flip = false, id = "a" }: { swan?: 
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        const r = el.parentElement!.getBoundingClientRect();
+        const parent = el.parentElement;
+        if (!parent) return;
+        const r = parent.getBoundingClientRect();
         const p = (window.innerHeight - r.top) / (window.innerHeight + r.height);
         const x = (flip ? 1 - p : p) * 90 - 10;
         el.style.transform = `translate3d(${x}vw, ${Math.sin(p * 6) * 8}px, 0) scaleX(${flip ? -1 : 1})`;
@@ -23,12 +25,13 @@ export function CloudDivider({ swan = false, flip = false, id = "a" }: { swan?: 
   }, [swan, flip]);
 
   return (
-    <div aria-hidden="true" className="pointer-events-none relative h-24 overflow-hidden md:h-32">
+    <div aria-hidden="true" className="pointer-events-none cloud-divider relative h-32 overflow-hidden md:h-32">
       <Cloud className="absolute bottom-0 h-16 w-[140%] -translate-x-[10%] opacity-70" />
       <Cloud className="absolute bottom-0 h-10 w-full" />
       {swan && (
-        <div ref={ref} className="absolute bottom-6 left-0 w-20 will-change-transform md:w-28">
-          <Swan id={id} className="w-full drop-shadow-[0_6px_10px_var(--blush)]" />
+        <div ref={ref} className="absolute bottom-6 left-0 divider-swan w-36 will-change-transform md:w-44">
+          <Sparkle className="swan-trail" animate />
+          <Swan variant={id === "b" ? "resting" : undefined} className="w-full drop-shadow-[0_6px_10px_var(--blush)]" />
         </div>
       )}
     </div>

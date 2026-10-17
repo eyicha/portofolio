@@ -1,0 +1,2 @@
+import { ArtFrame, type ArtProps } from "./ArtFrame";
+export function Petals({ variant, ...props }: ArtProps) { return <ArtFrame name="Petals" viewBox="0 0 60 70" {...props}>{id => <><path d={variant === "round" ? "M30 6C-10 12 10 57 40 62C63 25 52 10 30 6Z" : variant === "curl" ? "M8 60Q-8 20 39 9Q57 6 49 30Q23 29 8 60Z" : "M7 63Q-7 21 47 7Q61 47 7 63Z"} fill={`url(#${id}-pink)`} stroke="var(--blush)"/><path d="M9 59Q27 28 43 15" stroke="var(--pearl)" fill="none" opacity=".6"/></>}</ArtFrame>; }

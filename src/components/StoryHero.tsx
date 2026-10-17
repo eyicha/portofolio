@@ -1,0 +1,41 @@
+import { useState } from "react";
+import { profile } from "@/data/profile";
+import { MixedTitle } from "./MixedTitle";
+import { Button } from "./ui/button";
+import { Castle, Balustrade, RoseCluster, BlossomBranch, Petals, Wings, RibbonBow, Swan, Bunny, BookStack, Sparkle, Star, Cloud } from "./illustrations";
+
+export function StoryHero() {
+  const [missing, setMissing] = useState(false);
+  return <section id="top" className="story-hero">
+    <div className="hero-sky" aria-hidden="true" />
+    <Castle className="hero-castle" variant="wide" />
+    <Cloud className="hero-cloud" variant="wispy" />
+    <BlossomBranch className="hero-blossom blossom-left" />
+    <BlossomBranch className="hero-blossom blossom-right" flip />
+    <div className="hero-heading">
+      <p className="chapter-eyebrow">Chapter <span className="font-script">I</span></p>
+      <h1><MixedTitle text="Hi, I'm Erisa" /></h1>
+      <span className="hero-script font-script">fairy tale</span>
+      <p className="hero-intro">I turn data into stories and build the systems behind them</p>
+    </div>
+    <div className="hero-portrait animate-float">
+      <Wings className="hero-wings" animate />
+      {!missing && <img src={profile.photo} alt="Portrait of Erisa Salsabila" onError={() => setMissing(true)} className="portrait-cutout" />}
+      {missing && <div className="portrait-placeholder" role="img" aria-label="Pink silhouette placeholder for Erisa's portrait"><svg viewBox="0 0 260 400" aria-hidden="true"><path d="M81 115C50 39 91 4 130 5C174 3 210 47 179 116L186 150Q226 178 234 233L249 399H11L26 233Q34 178 74 150Z" fill="var(--portrait-pink)"/><ellipse cx="130" cy="80" rx="44" ry="58" fill="var(--rose)"/><path d="M90 130Q130 151 170 130L166 168Q130 185 94 168Z" fill="var(--rose)"/></svg><span>TODO portrait</span></div>}
+    </div>
+    <Balustrade className="hero-balustrade" />
+    <div className="hero-letter">
+      <p className="letter-caption"><MixedTitle text="About the heroine" /></p>
+      {[ ["Name", profile.name], ["Role", profile.role], ["Campus", profile.campus], ["Base", profile.base] ].map(([label, value]) => <p key={label} className="bio-entry"><MixedTitle text={label} className="bio-label" /><span>{value}</span></p>)}
+    </div>
+    <RibbonBow className="hero-bow" />
+    <BookStack className="hero-books" />
+    <Bunny className="hero-bunny" />
+    <Swan className="hero-swan" variant="resting" />
+    <RoseCluster className="hero-roses roses-left" variant="foreground" />
+    <RoseCluster className="hero-roses roses-right" flip />
+    <Sparkle className="hero-star star-one" animate /><Star className="hero-star star-two" animate />
+    <div className="petal-layer" aria-hidden="true">{Array.from({ length: 7 }, (_, i) => <Petals key={i} variant={i % 2 ? "curl" : "round"} className={`falling-petal petal-${i}`} animate />)}</div>
+    <div className="hero-actions"><Button asChild className="ribbon-tag"><a href="#work"><MixedTitle text="View Work" /></a></Button><Button asChild variant="outline" className="ribbon-tag ribbon-light"><a href={profile.cvUrl}><MixedTitle text="Download CV" /></a></Button></div>
+  </section>;
+}

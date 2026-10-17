@@ -1,3 +1,5 @@
+import { MixedTitle } from "./MixedTitle";
+import { Sparkle } from "./illustrations";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export function Star({ className = "", size = 14 }: { className?: string; size?: number }) {
@@ -107,21 +109,12 @@ export function useReveal<T extends HTMLElement>() {
 }
 
 export function Chapter({ n, title, id, children }: { n: string; title: string; id?: string; children: ReactNode }) {
-  const ref = useReveal<HTMLDivElement>();
-  return (
-    <section id={id} className="relative z-10 mx-auto max-w-6xl scroll-mt-24 px-5 py-16 md:py-24">
-      <div ref={ref} className="page-in mb-10 text-center">
-        <p className="font-display text-lg italic text-mauve">Chapter {n}</p>
-        <h2 className="mt-1 font-display text-4xl font-semibold text-plum md:text-5xl">{title}</h2>
-        <div className="mt-3 flex items-center justify-center gap-3 text-rose">
-          <span className="h-px w-16 bg-rose/60" />
-          <Star size={12} />
-          <span className="h-px w-16 bg-rose/60" />
-        </div>
-      </div>
-      {children}
-    </section>
-  );
+  const ref = useReveal<HTMLElement>();
+  const number = { Two: "II", Three: "III", Four: "IV", Five: "V", Six: "VI", Seven: "VII" }[n] ?? n;
+  return <section ref={ref} id={id} className="chapter-page page-in scroll-mt-24">
+    <header className="chapter-header"><span className="chapter-bookmark" aria-hidden="true"/><p className="chapter-eyebrow">Chapter <span className="chapter-numeral font-script">{number}</span></p><h2><MixedTitle text={title} write /></h2><Sparkle className="chapter-sparkle" /></header>
+    <div className="chapter-content">{children}</div><span className="page-number" aria-hidden="true">{number}</span><span className="page-curl" aria-hidden="true"/>
+  </section>;
 }
 
 export function SafeImage({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
@@ -136,7 +129,7 @@ export function SafeImage({ src, alt, className = "" }: { src: string; alt: stri
   }, []);
   if (failed || !src)
     return (
-      <div role="img" aria-label={alt} className={`flex items-center justify-center bg-gradient-to-br from-blush via-peri to-baby p-3 text-center text-xs text-plum/70 ${className}`}>
+      <div role="img" aria-label={alt} className={`flex items-center justify-center bg-gradient-to-br from-blush via-cream to-rose p-3 text-center text-xs text-plum/70 ${className}`}>
         {src.split("/").pop() || "image"}
       </div>
     );

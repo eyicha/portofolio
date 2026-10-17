@@ -1,0 +1,2 @@
+import { ArtFrame, type ArtProps } from "./ArtFrame";
+export function PaperPlane({ variant, ...props }: ArtProps) { return <ArtFrame name="PaperPlane" viewBox="0 0 300 190" {...props}>{id => <><path d="M4 85L288 7L194 179L122 115L88 158L77 105Z" fill={`url(#${id}-paper)`} stroke="var(--rose)" strokeWidth="2"/><path d="M77 105L288 7L122 115L88 158Z" fill={`url(#${id}-pink)`}/><path d="M122 115L288 7M77 105L288 7" stroke="var(--pearl)" strokeWidth="2"/><path d="M88 158L96 120L122 115" fill="var(--mauve)"/></>}</ArtFrame>; }
