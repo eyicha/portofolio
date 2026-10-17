@@ -22,6 +22,18 @@ export function Opening() {
     setPhase("done");
   };
 
+  useEffect(() => {
+    let timers: ReturnType<typeof setTimeout>[] = [];
+    const replay = () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setPhase("done"); return; }
+      timers.forEach(clearTimeout);
+      setPhase("opening");
+      timers = [setTimeout(() => setPhase("invite"), 550), setTimeout(() => setPhase("zoom"), 1100), setTimeout(finish, 1700)];
+    };
+    window.addEventListener("erisa-replay", replay);
+    return () => { window.removeEventListener("erisa-replay", replay); timers.forEach(clearTimeout); };
+  }, []);
+
   const open = () => {
     if (reduced) {
       setPhase("zoom");

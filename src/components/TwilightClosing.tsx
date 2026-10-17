@@ -34,7 +34,7 @@ export function TwilightClosing() {
         <h2><MixedTitle text="Erisa's Fairy Tale" /></h2>
         <div className="gold-clasp" aria-hidden="true"><svg viewBox="0 0 30 60"><rect x="3" y="3" width="24" height="54" rx="7" fill="var(--foil)" stroke="var(--foil-light)"/><circle cx="15" cy="24" r="5" fill="var(--deep-rose)"/><path d="M13 25H17L20 38H10Z" fill="var(--deep-rose)"/></svg></div>
       </div>
-      <Button variant="ghost" className="book-bookmark" aria-label="Back to the first page" onClick={replay}><RibbonBow /><span className="bookmark-charm" aria-hidden="true">✦</span></Button>
+      <Button variant="ghost" className="book-bookmark" aria-label="Back to the first page" onClick={replay}><RibbonBow /><span className="bookmark-charm" aria-hidden="true"><Star /></span></Button>
     </div>
     <div className="colophon"><p>Written and bound by Erisa Salsabila</p><p>Set in Cormorant Garamond, Jost and Pinyon Script.</p><p>Printed in Bogor, West Java, 2026.</p><p>Edition of one.</p></div>
     <div className="lake" aria-hidden="true">

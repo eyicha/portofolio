@@ -25,14 +25,17 @@ function Index() {
         <Hero />
         <CloudDivider swan id="a" />
         <About />
+        <CloudDivider />
         <Stack />
         <CloudDivider swan flip id="b" />
         <HowIWork />
+        <CloudDivider />
         <Portfolio />
         <CloudDivider swan id="c" />
         <Honors />
+        <CloudDivider />
         <Certs />
-        <CloudDivider swan flip id="d" />
+        <CloudDivider />
         <TheEnd />
       </main>
     </>
