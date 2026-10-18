@@ -1,5 +1,5 @@
 import { useId, useState, type ReactNode } from "react";
-export type ArtProps = { className?: string; width?: number | string; flip?: boolean; animate?: boolean; variant?: string; alt?: string };
+export type ArtProps = { className?: string; width?: number | string; flip?: boolean; animate?: boolean; variant?: string | undefined; alt?: string };
 export function ArtFrame({ name, viewBox, children, className = "", width, flip, animate, alt }: ArtProps & { name: string; viewBox: string; children: (id: string) => ReactNode }) {
  const id = useId().replace(/:/g, ""); const [custom, setCustom] = useState(false);
  return <span className={`story-art ${flip ? "art-flipped" : ""} ${animate ? "art-animated" : ""} ${className}`}>

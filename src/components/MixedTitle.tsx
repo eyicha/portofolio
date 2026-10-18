@@ -5,7 +5,7 @@ export function splitTitle(text: string) {
     const match = word.match(/[A-Za-zÀ-ž]/);
     const position = match?.index;
     if (position === undefined) return { initial: "", rest: word, prefix: "" };
-    return { prefix: word.slice(0, position), initial: word[position].toUpperCase(), rest: word.slice(position + 1) };
+    return { prefix: word.slice(0, position), initial: word.charAt(position).toUpperCase(), rest: word.slice(position + 1) };
   });
 }
 
