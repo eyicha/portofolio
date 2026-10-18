@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { profile } from "@/data/profile";
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
 import { Castle, Balustrade, RoseCluster, BlossomBranch, Petals, Wings, RibbonBow, Swan, Bunny, BookStack, Sparkle, Star, Cloud } from "./illustrations";
 
 export function StoryHero() {
-  const [missing, setMissing] = useState(false);
+  const [missing, setMissing] = useState(true);
+  useEffect(() => { const photo = new Image(); photo.onerror = () => setMissing(true); photo.onload = () => { if (photo.naturalWidth > 0) setMissing(false); }; photo.src = profile.photo; return () => { photo.onerror = null; }; }, []);
   return <section id="top" className="story-hero">
     <div className="hero-sky" aria-hidden="true" />
     <Castle className="hero-castle" variant="wide" />
@@ -26,7 +27,7 @@ export function StoryHero() {
     <Balustrade className="hero-balustrade" />
     <div className="hero-letter">
       <p className="letter-caption"><MixedTitle text="About the heroine" /></p>
-      {[ ["Name", profile.name], ["Role", profile.role], ["Campus", profile.campus], ["Base", profile.base] ].map(([label, value]) => <p key={label} className="bio-entry"><MixedTitle text={label} className="bio-label" /><span>{value}</span></p>)}
+      {([ ["Name", profile.name], ["Role", profile.role], ["Campus", profile.campus], ["Base", profile.base] ] as const).map(([label, value]) => <p key={label} className="bio-entry"><MixedTitle text={label} className="bio-label" /><span>{value}</span></p>)}
     </div>
     <RibbonBow className="hero-bow" />
     <BookStack className="hero-books" />

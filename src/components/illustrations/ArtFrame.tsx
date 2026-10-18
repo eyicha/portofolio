@@ -1,8 +1,22 @@
-import { useId, useState, type ReactNode } from "react";
-export type ArtProps = { className?: string; width?: number | string; flip?: boolean; animate?: boolean; variant?: string; alt?: string };
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+export type ArtProps = { className?: string; width?: number | string; flip?: boolean; animate?: boolean; variant?: string | undefined; alt?: string };
 export function ArtFrame({ name, viewBox, children, className = "", width, flip, animate, alt }: ArtProps & { name: string; viewBox: string; children: (id: string) => ReactNode }) {
  const id = useId().replace(/:/g, ""); const [custom, setCustom] = useState(false);
- return <span className={`story-art ${flip ? "art-flipped" : ""} ${animate ? "art-animated" : ""} ${className}`}>
+ const element = useRef<HTMLSpanElement>(null);
+ useEffect(() => {
+   const el = element.current;
+   if (!el) return;
+   const observer = new IntersectionObserver(entries => {
+     if (!entries[0]?.isIntersecting) return;
+     const image = new Image();
+     image.onload = () => setCustom(image.naturalWidth > 0);
+     image.src = `/images/art/${name}.png`;
+     observer.disconnect();
+   }, { rootMargin: "200px" });
+   observer.observe(el);
+   return () => observer.disconnect();
+ }, [name]);
+ return <span ref={element} className={`story-art ${flip ? "art-flipped" : ""} ${animate ? "art-animated" : ""} ${className}`}>
  <img src={`/images/art/${name}.png`} alt={alt ?? ""} aria-hidden={!alt} loading="lazy" width={width} onLoad={() => setCustom(true)} onError={e => { e.currentTarget.hidden = true; }} className={custom ? "art-custom" : "art-probe"} />
  {!custom && <svg width={width} viewBox={viewBox} role={alt ? "img" : undefined} aria-label={alt} aria-hidden={!alt}>
  <defs>
