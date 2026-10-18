@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { profile } from "@/data/profile";
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
@@ -6,6 +6,7 @@ import { Castle, Balustrade, RoseCluster, BlossomBranch, Petals, Wings, RibbonBo
 
 export function StoryHero() {
   const [missing, setMissing] = useState(false);
+  useEffect(() => { const photo = new Image(); photo.onerror = () => setMissing(true); photo.src = profile.photo; return () => { photo.onerror = null; }; }, []);
   return <section id="top" className="story-hero">
     <div className="hero-sky" aria-hidden="true" />
     <Castle className="hero-castle" variant="wide" />
