@@ -5,7 +5,6 @@ import { MixedTitle } from "./MixedTitle";
 import { ContactLetter } from "./ContactLetter";
 import { Button } from "./ui/button";
 import { Sparkle } from "./illustrations";
-import { Flower } from "./ornaments";
 
 const items = [
   ["Story", "story"],
@@ -85,7 +84,7 @@ export function Lightbox({ src, alt, onClose }: { src: string | null; alt: strin
     <div role="dialog" aria-modal="true" aria-label={alt} onClick={onClose} className="fixed inset-0 z-[95] flex items-center justify-center bg-plum/70 p-6">
       <div onClick={(e) => e.stopPropagation()} className="parchment ornate max-h-[85vh] max-w-3xl rounded-2xl p-4">
         <img src={src} alt={alt} className="max-h-[70vh] w-full rounded-lg object-contain" onError={(e) => ((e.target as HTMLImageElement).alt = `${alt} (missing: ${src})`)} />
-        <Button onClick={onClose} className="mt-3 w-full font-display italic text-deep-rose">Close</Button>
+        <Button variant="ghost" onClick={onClose} className="mt-3 w-full text-deep-rose"><MixedTitle text="Close" /></Button>
       </div>
     </div>
   );

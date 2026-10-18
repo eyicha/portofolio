@@ -47,7 +47,7 @@ function ProjectPage() {
   const shots = p.screenshots.filter(Boolean);
   return (
     <main className="relative z-10 mx-auto max-w-4xl space-y-8 px-5 py-12">
-      <Link to="/" hash="work" className="font-display italic text-deep-rose underline underline-offset-4">Back to the story</Link>
+      <Link to="/" hash="work" className="text-deep-rose underline underline-offset-4"><MixedTitle text="Back to the story" /></Link>
       <header className="parchment ornate rounded-t-[6rem] rounded-b-3xl p-8 pt-12 text-center">
         <p className="font-display italic text-mauve">{p.year} · {p.role} · {p.status}</p>
         <h1 className="mt-2 text-4xl text-deep-rose md:text-7xl"><MixedTitle text={p.title} /></h1>
