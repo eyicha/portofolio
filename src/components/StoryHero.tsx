@@ -27,7 +27,7 @@ export function StoryHero() {
     <Balustrade className="hero-balustrade" />
     <div className="hero-letter">
       <p className="letter-caption"><MixedTitle text="About the heroine" /></p>
-      {[ ["Name", profile.name], ["Role", profile.role], ["Campus", profile.campus], ["Base", profile.base] ].map(([label, value]) => <p key={label} className="bio-entry"><MixedTitle text={label} className="bio-label" /><span>{value}</span></p>)}
+      {([ ["Name", profile.name], ["Role", profile.role], ["Campus", profile.campus], ["Base", profile.base] ] as const).map(([label, value]) => <p key={label} className="bio-entry"><MixedTitle text={label} className="bio-label" /><span>{value}</span></p>)}
     </div>
     <RibbonBow className="hero-bow" />
     <BookStack className="hero-books" />
