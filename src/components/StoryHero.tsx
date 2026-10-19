@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { profile } from "@/data/profile";
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
-import { Castle, Balustrade, RoseCluster, BlossomBranch, Petals, Wings, RibbonBow, Swan, Bunny, BookStack, Sparkle, Star, Cloud } from "./illustrations";
+import { Castle, Balustrade, RoseCluster, BlossomBranch, Petals, Wings, RibbonBow, Bunny, BookStack, Sparkle, Star, Cloud } from "./illustrations";
 
 export function StoryHero() {
   const [missing, setMissing] = useState(true);
@@ -32,7 +32,6 @@ export function StoryHero() {
     <RibbonBow className="hero-bow" />
     <BookStack className="hero-books" />
     <Bunny className="hero-bunny" />
-    <Swan className="hero-swan" variant="resting" />
     <RoseCluster className="hero-roses roses-left" variant="foreground" />
     <RoseCluster className="hero-roses roses-right" flip />
     <Sparkle className="hero-star star-one" animate /><Star className="hero-star star-two" animate />

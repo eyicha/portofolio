@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { FairyRiver } from "@/components/FairyRiver";
 import { Opening } from "@/components/Opening";
 import { CloudDivider } from "@/components/CloudDivider";
 import { Hero, About, Stack, HowIWork, Portfolio, Honors, Certs, TheEnd } from "@/components/Sections";
@@ -23,7 +24,7 @@ function Index() {
       <Opening />
       <main>
         <Hero />
-        <CloudDivider swan id="a" />
+        <FairyRiver />
         <About />
         <CloudDivider />
         <Stack />
