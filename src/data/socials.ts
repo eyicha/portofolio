@@ -1,6 +1,6 @@
 export const socials = [
-  { label: "LinkedIn profile", url: "", icon: "linkedin" }, // TODO URL
-  { label: "GitHub profile", url: "", icon: "github" }, // TODO URL
-  { label: "Instagram profile", url: "", icon: "instagram" }, // TODO URL
-  { label: "Email Erisa", url: "", icon: "email" }, // TODO URL
+  { label: "LinkedIn profile", url: "https://www.linkedin.com/in/erisa-salsabila", icon: "linkedin" },
+  { label: "GitHub profile", url: "https://github.com/eyicha", icon: "github" },
+  { label: "Instagram profile", url: "https://www.instagram.com/erisabyla", icon: "instagram" },
+  { label: "Email Erisa", url: "mailto:erisasalsabila@apps.ipb.ac.id", icon: "email" },
 ] as const;
