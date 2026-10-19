@@ -61,7 +61,7 @@ export function MusicToggle() {
 }
 
 export function Footer() {
-  return <><ContactLetter /><footer className="icon-footer"><div className="social-row">{socials.filter(item => item.url).map(item => <Button asChild key={item.icon} className="social-button"><a href={item.url} aria-label={item.label} target="_blank" rel="noopener noreferrer"><SocialIcon icon={item.icon} /><span className="social-sparkle" aria-hidden="true"><Sparkle /></span></a></Button>)}</div><p>© 2026 Erisa Salsabila</p></footer></>;
+  return <><ContactLetter /><footer className="icon-footer"><div className="social-row">{socials.filter(item => item.url).map(item => <Button asChild key={item.icon} className="social-button"><a href={item.url} aria-label={item.label} {...(item.url.startsWith("mailto:") ? {} : { target: "_blank", rel: "noopener noreferrer" })}><SocialIcon icon={item.icon} /><span className="social-sparkle" aria-hidden="true"><Sparkle /></span></a></Button>)}</div><p>© 2026 Erisa Salsabila</p></footer></>;
 }
 function SocialIcon({ icon }: { icon: string }) {
  const paths: Record<string, string> = {

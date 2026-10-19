@@ -8,9 +8,9 @@ export const profile = {
   email: "TODO@email.com",
   location: "Bogor, West Java",
   links: {
-    linkedin: "#TODO-linkedin",
-    github: "#TODO-github",
-    instagram: "#TODO-instagram",
+    linkedin: "https://www.linkedin.com/in/erisa-salsabila",
+    github: "https://github.com/eyicha",
+    instagram: "https://www.instagram.com/erisabyla",
   },
   bio: "TODO: Two or three sentences about who you are, what you study at IPB University, and what kind of problems you like to work on.",
   direction:
