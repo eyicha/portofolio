@@ -12,6 +12,7 @@
 ## Application architecture
 - Keep home and project detail routes on TanStack Router to preserve platform routing.
 - Use MixedTitle for title typography and shared illustration wrappers for artwork so lettering and image replacements stay consistent.
-- The contact letter remains a front-end animation; inquiry AI runs through a validated public server function, never sending or storing the submitted letter.
+- Contact success animation must follow a confirmed email send; until sender setup is complete, submission retains input and reports failure. Inquiry AI uses a validated public server function without storing letter content.
 - Persist terminal AI access pauses server-side and do not automatically retry them, preventing repeat blocked requests across reloads.
+- Hero-to-About river uses a dedicated bounded decorative gutter with scroll position updated through animation frames, preventing artwork from crossing into text.
 - Shortened storybook replay uses an explicit event without changing first-visit session behavior.
