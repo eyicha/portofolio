@@ -1,6 +1,6 @@
 # Refinement roadmap
-- [ ] Repair hero paper overlap, river, transparent swans, and closing ribbon
-- [ ] Add AI follow-up question chips and requested input limits
+- [x] Repair hero paper overlap, river, transparent swans, and closing ribbon
+- [x] Add AI follow-up question chips and requested input limits
 - [ ] Send real contact emails (blocked by sender domain setup)
 - [ ] Limit letters to 3 per visitor per hour (blocked by approval of a custom limit)
 - [x] Mixed lettering and pink palette across retained pages
