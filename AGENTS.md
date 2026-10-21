@@ -14,5 +14,7 @@
 - Use MixedTitle for title typography and shared illustration wrappers for artwork so lettering and image replacements stay consistent.
 - Contact success animation must follow a confirmed email send; until sender setup is complete, submission retains input and reports failure. Inquiry AI uses a validated public server function without storing letter content.
 - Persist terminal AI access pauses server-side and do not automatically retry them, preventing repeat blocked requests across reloads.
-- Hero-to-About river uses a dedicated bounded decorative gutter with scroll position updated through animation frames, preventing artwork from crossing into text.
+- Hero-to-About river uses a dedicated bounded decorative gutter with centered swan sway updated through animation frames, preventing artwork from crossing into text.
 - Shortened storybook replay uses an explicit event without changing first-visit session behavior.
+- Opening and closing render the shared Storybook cover; OpeningGarden contains the bounded decorative invitation scene so both covers stay identical.
+- Send-letter uses a validated public TanStack server function with a server-only sender and recipient, escaped email content and fail-closed missing configuration; do not enable delivery before the durable visitor limit is implemented.

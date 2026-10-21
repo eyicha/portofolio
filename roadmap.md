@@ -1,13 +1,9 @@
 # Refinement roadmap
-- [x] Repair hero paper overlap, river, transparent swans, and closing ribbon
-- [x] Add AI follow-up question chips and requested input limits
-- [ ] Send real contact emails (blocked by sender domain setup)
-- [ ] Limit letters to 3 per visitor per hour (blocked by approval of a custom limit)
-- [x] Mixed lettering and pink palette across retained pages
-- [x] SVG illustration library and collage hero
-- [x] Parchment chapters and twilight closing with replay
-- [x] Letter animation and minimal footer
-- [x] AI inquiry classification and response suggestion
-- [x] Mobile, route, animation and live inquiry checks
-- [x] Real LinkedIn, GitHub, Instagram and email links in the footer row
-- [ ] CV file for the Download CV button (needs the actual file from Erisa)
+- [ ] Shared linen hardcover and opening garden sequence
+- [ ] Center and enrich divider, river and lake swans
+- [ ] Centered, validity-aware contact seal
+- [ ] Inactive secret-backed email sending scaffold, no credential prompts
+- [ ] Verify at 360, 414, 768 and 1280 pixels
+- [ ] Real email delivery (waiting on credentials and sender setup, not requested now)
+- [ ] Per-visitor email limit (waiting on approval of custom infrastructure)
+- [ ] CV file (waiting on Erisa's file)

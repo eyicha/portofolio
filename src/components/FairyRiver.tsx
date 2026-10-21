@@ -14,7 +14,7 @@ export function FairyRiver() {
       frame = requestAnimationFrame(() => {
         const rect = el.getBoundingClientRect();
         const progress = Math.max(0, Math.min(1, (innerHeight - rect.top) / (innerHeight + rect.height)));
-        bird.style.transform = `translateX(${progress * Math.max(0, rect.width - bird.offsetWidth - 32)}px)`;
+        bird.style.transform = `translateX(-50%) translateY(${Math.sin(progress * Math.PI * 2) * 6}px)`;
       });
     };
     update();
