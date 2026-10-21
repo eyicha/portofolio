@@ -15,13 +15,12 @@ export function CloudDivider({ swan = false, flip = false, id = "a" }: { swan?: 
         if (!parent) return;
         const r = parent.getBoundingClientRect();
         const p = (window.innerHeight - r.top) / (window.innerHeight + r.height);
-        const x = (flip ? 1 - p : p) * 90 - 10;
-        el.style.transform = `translate3d(${x}vw, ${Math.sin(p * 6) * 8}px, 0) scaleX(${flip ? -1 : 1})`;
+        el.style.transform = `translateX(-50%) translateY(${Math.sin(p * 6) * 6}px)`;
       });
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", onScroll); };
   }, [swan, flip]);
 
   return (
@@ -29,9 +28,9 @@ export function CloudDivider({ swan = false, flip = false, id = "a" }: { swan?: 
       <Cloud className="absolute bottom-0 h-16 w-[140%] -translate-x-[10%] opacity-70" />
       <Cloud className="absolute bottom-0 h-10 w-full" />
       {swan && (
-        <div ref={ref} className="absolute bottom-6 left-0 divider-swan w-36 will-change-transform md:w-44">
+        <div ref={ref} className="absolute divider-swan will-change-transform">
           <Sparkle className="swan-trail" animate />
-          <Swan variant={id === "b" ? "resting" : undefined} className="w-full drop-shadow-[0_6px_10px_var(--blush)]" />
+          <Swan flip={flip} variant={id === "b" ? "resting" : undefined} className="w-full" />
         </div>
       )}
     </div>
