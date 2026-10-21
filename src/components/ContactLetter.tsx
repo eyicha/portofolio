@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { classifyInquiry } from "@/lib/inquiry.functions";
+import { sendLetter } from "@/lib/send-letter.functions";
+import { LETTER_SEND_ERROR } from "@/lib/send-letter-schema";
 import { appendQuestion, inquirySchema, type Suggestion } from "@/lib/inquiry-schema";
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
@@ -9,10 +11,29 @@ import { Envelope, WaxSeal, PaperPlane, LaceEdge, Swan, Sparkle, RoseCluster, Ch
 export function ContactLetter() {
   const [phase, setPhase] = useState<"writing" | "flying" | "done">("writing");
   const [busy, setBusy] = useState(false);
+  const [valid, setValid] = useState(false);
+  const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<Suggestion | null>(null);
   const form = useRef<HTMLFormElement>(null);
   const suggest = useServerFn(classifyInquiry);
+  const send = useServerFn(sendLetter);
+  const updateValidity = () => {
+    if (!form.current) return;
+    setValid(form.current.checkValidity() && inquirySchema.safeParse(Object.fromEntries(new FormData(form.current))).success);
+  };
+  const submit = async () => {
+    if (busy || !form.current?.reportValidity()) return;
+    const fields = Object.fromEntries(new FormData(form.current));
+    const parsed = inquirySchema.safeParse(fields);
+    if (!parsed.success) { setError(parsed.error.issues[0]?.message ?? LETTER_SEND_ERROR); return; }
+    setBusy(true); setSending(true); setError("");
+    try {
+      const response = await send({ data: { ...parsed.data, website: String(fields.website ?? ""), aiSuggestion: result } });
+      if (response.sent) setPhase("flying"); else setError(LETTER_SEND_ERROR);
+    } catch { setError(LETTER_SEND_ERROR); }
+    finally { setBusy(false); setSending(false); }
+  };
   useEffect(() => {
     if (phase !== "flying") return;
     const t = setTimeout(() => setPhase("done"), matchMedia("(prefers-reduced-motion: reduce)").matches ? 150 : 3200);
@@ -32,14 +53,19 @@ export function ContactLetter() {
     <Cherub className="contact-cherub" />
     <RoseCluster className="contact-rose" flip />
     <div className={`letter-stage letter-${phase}`}>
-      <form ref={form} onSubmit={e => { e.preventDefault(); if (busy) return; const parsed = inquirySchema.safeParse(Object.fromEntries(new FormData(e.currentTarget))); if (!parsed.success) { setError(parsed.error.issues[0]?.message ?? "Please check your letter."); return; } setError("The letter could not be sent. Please try again in a moment."); }} className="love-letter" aria-hidden={phase !== "writing"} inert={phase !== "writing"}>
+      <form ref={form} onInput={updateValidity} onChange={updateValidity} onSubmit={e => { e.preventDefault(); void submit(); }} className="love-letter" aria-hidden={phase !== "writing"} inert={phase !== "writing"}>
         <LaceEdge className="letter-lace" />
         <p className="dear-erisa font-script">Dear Erisa,</p>
         <label><MixedTitle text="Your name" /><input name="name" required maxLength={100} autoComplete="name" /></label>
         <label><MixedTitle text="Your email" /><input name="email" type="email" required maxLength={255} autoComplete="email" /></label>
         <label><MixedTitle text="Your message" /><textarea name="message" required minLength={10} maxLength={2000} rows={4} /></label>
         <div className="letter-honeypot" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
-        <div className="letter-buttons"><Button type="button" variant="outline" className="ai-letter-button" onClick={analyze} disabled={busy}><MixedTitle text={busy ? "Considering your letter" : "AI response suggestion"} /></Button><Button type="submit" className="seal-send" disabled={busy}><WaxSeal /><MixedTitle text="Seal and send" /></Button></div>
+        <div className={`letter-seal-area ${valid ? "seal-ready" : "seal-incomplete"}`}>
+          <p className="seal-hint">{sending ? "Sending your letter" : valid ? "Tap the seal to send your letter" : "Fill in the letter first"}</p>
+          <Button type="submit" className="seal-send" aria-label="Seal and send letter" disabled={busy || !valid}><WaxSeal /><Sparkle className="seal-edge-sparkle"/><span className="seal-glow-ring" aria-hidden="true"/></Button>
+          <p className="seal-caption"><MixedTitle text="Seal and send" /></p>
+        </div>
+        <div className="letter-buttons"><Button type="button" variant="outline" className="ai-letter-button" onClick={analyze} disabled={busy}><MixedTitle text={busy && !sending ? "Considering your letter" : "AI response suggestion"} /></Button></div>
         <p className="letter-note">Email sending is awaiting setup. AI suggestions are only drafts.</p>
         <p role="alert" className="letter-error">{error}</p>
       </form>
@@ -51,7 +77,7 @@ export function ContactLetter() {
         <Sparkle className="flight-sparkle" animate />
         <Button variant="link" className="skip-flight" onClick={() => setPhase("done")}>Skip animation</Button>
       </div>}
-      {phase === "done" && <div className="letter-finished" role="status"><PaperPlane className="finished-plane" /><p>Your email has been sent to Erisa. She would love to discuss this further, so please wait for her reply in your inbox.</p><Button variant="link" onClick={() => { setPhase("writing"); setResult(null); form.current?.reset(); }}><MixedTitle text="Write another" /></Button></div>}
+      {phase === "done" && <div className="letter-finished" role="status"><PaperPlane className="finished-plane" /><p>Your email has been sent to Erisa. She would love to discuss this further, so please wait for her reply in your inbox.</p><Button variant="link" onClick={() => { setPhase("writing"); setResult(null); setValid(false); form.current?.reset(); }}><MixedTitle text="Write another" /></Button></div>}
     </div>
     {result && <aside className="suggestion-letter" aria-live="polite"><p className="suggestion-category">AI suggestion: {result.category}</p><p>{result.summary}</p><p className="suggestion-label">Suggested follow-up questions</p><div className="suggestion-questions">{result.questions.map(question => <Button key={question} variant="outline" className="parchment-question" onClick={() => {
       const field = form.current?.elements.namedItem("message");
