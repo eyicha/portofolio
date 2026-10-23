@@ -16,5 +16,5 @@ export function letterEmail(data: z.infer<typeof sendLetterSchema>, sentAt: stri
   const draft = data.aiSuggestion;
   const lines = ["Name: " + data.name, "Email: " + data.email, "Date and time: " + sentAt, "", data.message];
   if (draft) lines.push("", "AI suggestion: " + draft.category, draft.summary, ...draft.questions, "AI draft reply (for Erisa)", draft.suggestion);
-  return { subject: `New letter from ${data.name.replace(/[\r\n]/g, " ")}`, text: lines.join("\n"), html: lines.map(line => `<p>${escapeEmailHtml(line)}</p>`).join("") };
+  return { subject: `Pesan baru dari ${data.name.replace(/[\r\n]/g, " ")}`, text: lines.join("\n"), html: lines.map(line => `<p>${escapeEmailHtml(line)}</p>`).join("") };
 }

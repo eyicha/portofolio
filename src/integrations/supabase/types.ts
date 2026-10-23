@@ -40,7 +40,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_letter_send: {
+        Args: {
+          p_visitor_hash: string
+          p_max_sends: number
+          p_window_seconds: number
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

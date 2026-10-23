@@ -18,6 +18,7 @@ export function ContactLetter() {
   const [result, setResult] = useState<Suggestion | null>(null);
   const form = useRef<HTMLFormElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const operationInProgress = useRef(false);
   const suggest = useServerFn(classifyInquiry);
   const send = useServerFn(sendLetter);
   const updateValidity = () => {
@@ -25,16 +26,22 @@ export function ContactLetter() {
     setValid(form.current.checkValidity() && inquirySchema.safeParse(Object.fromEntries(new FormData(form.current))).success);
   };
   const submit = async () => {
-    if (busy || !form.current?.reportValidity()) return;
+    if (busy || operationInProgress.current || !form.current?.reportValidity()) return;
     const fields = Object.fromEntries(new FormData(form.current));
     const parsed = inquirySchema.safeParse(fields);
     if (!parsed.success) { setError(parsed.error.issues[0]?.message ?? LETTER_SEND_ERROR); return; }
+    operationInProgress.current = true;
     setBusy(true); setSending(true); setError("");
     try {
-      const response = await send({ data: { ...parsed.data, website: String(fields.website ?? ""), aiSuggestion: result } });
-      if (response.sent) setPhase("flying"); else setError(LETTER_SEND_ERROR);
-    } catch { setError(LETTER_SEND_ERROR); }
-    finally { setBusy(false); setSending(false); }
+      const response = await send({ data: { ...parsed.data, website: String(fields["website"] ?? ""), aiSuggestion: result } });
+      if (response.sent) {
+        form.current?.reset();
+        setValid(false);
+        setResult(null);
+        setPhase("flying");
+      } else setError(LETTER_SEND_ERROR);
+    } catch (e) { console.error("[client] sendLetter failed:", e); setError(LETTER_SEND_ERROR); }
+    finally { operationInProgress.current = false; setBusy(false); setSending(false); }
   };
   useEffect(() => {
     if (phase !== "flying") return;
@@ -42,13 +49,14 @@ export function ContactLetter() {
     return () => clearTimeout(t);
   }, [phase]);
   const analyze = async () => {
-    if (!form.current?.reportValidity()) return;
+    if (busy || operationInProgress.current || !form.current?.reportValidity()) return;
     const input = inquirySchema.safeParse(Object.fromEntries(new FormData(form.current)));
     if (!input.success) { setError(input.error.issues[0]?.message ?? "Please check your letter."); return; }
+    operationInProgress.current = true;
     setBusy(true); setError(""); setResult(null);
     try { const response = await suggest({ data: input.data }); if (response.error) setError(response.error); else setResult(response.result); }
-    catch { setError("Your suggestion could not be completed. Please try again later."); }
-    finally { setBusy(false); }
+    catch (e) { console.error("[client] suggest failed:", e); setError("Your suggestion could not be completed. Please try again later."); }
+      finally { operationInProgress.current = false; setBusy(false); }
   };
   return <section id="contact" className="contact-page scroll-mt-24" aria-label="Contact Erisa">
     <div className="contact-heading"><p className="chapter-eyebrow">Epilogue</p><h2><MixedTitle text="Contact" /></h2></div>
@@ -68,7 +76,7 @@ export function ContactLetter() {
           <p className="seal-caption"><MixedTitle text="Seal and send" /></p>
         </div>
         <div className="letter-buttons"><Button type="button" variant="outline" className="ai-letter-button" onClick={analyze} disabled={busy}><MixedTitle text={busy && !sending ? "Considering your letter" : "AI response suggestion"} /></Button></div>
-        <p className="letter-note">Email sending is awaiting setup. AI suggestions are only drafts.</p>
+        <p className="letter-note">AI suggestions are only drafts.</p>
         <p role="alert" className="letter-error">{error}</p>
       </form>
       {phase === "flying" && <div className="letter-flight" aria-label="Your letter folds and flies away">
