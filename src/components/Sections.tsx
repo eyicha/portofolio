@@ -1,15 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { profile, steps } from "@/data/profile";
-import { stack } from "@/data/stack";
+import { stack, type StackItem } from "@/data/stack";
 import { projects, type Project } from "@/data/projects";
-import { awards } from "@/data/awards";
-import { certs } from "@/data/certs";
+import { awards, type Award } from "@/data/awards";
+import { certs, type Cert } from "@/data/certs";
 import { Chapter, SafeImage, Star, WaxSeal } from "./ornaments";
-import { Lightbox } from "./Chrome";
+import { StoryModal } from "./Chrome";
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
 import { OrnateFrame } from "./illustrations";
+import { TechLogo } from "./TechLogo";
+import { useGlowCard } from "@/hooks/useGlowCard";
 
 export { StoryHero as Hero } from "./StoryHero";
 
@@ -29,24 +31,35 @@ export function About() {
 }
 
 export function Stack() {
+  const areas = stack.filter((shelf) => shelf.shelf !== "Everyday tools");
+  const everydayTools = stack.find((shelf) => shelf.shelf === "Everyday tools");
+  const subtitles: Record<string, string> = {
+    Frontend: "What I build screens with",
+    Backend: "What powers my services",
+    "Data Analyst": "How I read and explain data",
+  };
   return (
     <Chapter n="Three" title="Stack and Tools" id="stack">
-      <div className="grid gap-10 md:grid-cols-2">
-        {stack.map((s) => (
-          <div key={s.shelf} className="stack-shelf p-6 md:p-8">
-            <h3 className="text-center text-3xl text-deep-rose"><MixedTitle text={s.shelf} /></h3>
-            <ul className="mt-6 grid grid-cols-3 gap-4 border-b-8 border-mauve/40 pb-4">
-              {s.items.map((it, i) => (
-                <li key={i} className="flex flex-col items-center text-center">
-                  <span className={`flex h-16 w-16 items-center justify-center rounded-2xl font-display text-xl font-semibold text-plum shadow-[var(--shadow-paper)] ${i % 2 ? "bg-blush" : "glossy"}`}>{it.short}</span>
-                  <span className="mt-2 text-sm">{it.label}</span>
-                  <span className="text-xs italic text-mauve">{it.group}</span>
-                </li>
+      <div className="stack-area-grid">
+        {areas.map((s) => (
+          <section key={s.shelf} className="stack-shelf">
+            <h3 className="stack-area-heading"><MixedTitle text={s.shelf} /></h3>
+            <span className="stack-area-rule" aria-hidden="true" />
+            <p className="stack-area-subtitle">{subtitles[s.shelf]}</p>
+            <div className="stack-groups">
+              {[...new Set(s.items.map((item) => item.group))].map((group) => (
+                <section key={group} className="stack-item-group">
+                  <h4 className="stack-group-heading">{group}</h4>
+                  <ul className="stack-tile-grid">
+                    {s.items.filter((item) => item.group === group).map((item) => <StackTile key={`${item.label}-${item.short}`} item={item} />)}
+                  </ul>
+                </section>
               ))}
-            </ul>
-          </div>
+            </div>
+          </section>
         ))}
       </div>
+      {everydayTools && <section className="stack-everyday-tools"><h3 className="stack-everyday-heading"><MixedTitle text="Everyday tools" /></h3><ul className="stack-tile-grid">{everydayTools.items.map((item) => <StackTile key={item.label} item={item} />)}</ul></section>}
     </Chapter>
   );
 }
@@ -54,23 +67,33 @@ export function Stack() {
 export function HowIWork() {
   return (
     <Chapter n="Four" title="How I Work">
-      <ol className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+      <ol className="how-steps-grid">
         {steps.map((s, i) => (
-          <li key={s.title} className={`parchment ornate relative rounded-t-[4rem] rounded-b-2xl px-5 pb-6 pt-10 text-center ${i % 2 ? "lg:mt-10" : ""}`}>
-            <span className="absolute left-1/2 top-0 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full ribbon-bg font-display text-lg text-primary-foreground">{i + 1}</span>
-            <Star className="mx-auto text-rose" size={18} />
-            <h3 className="mt-2 font-display text-2xl font-semibold"><MixedTitle text={s.title} /></h3>
-            <p className="mt-2 text-sm">{s.text}</p>
-          </li>
+          <HowStepCard key={s.title} step={s} number={i + 1} />
         ))}
       </ol>
     </Chapter>
   );
 }
 
-export function ProjectCard({ p }: { p: Project }) {
+function HowStepCard({ step, number }: { step: (typeof steps)[number]; number: number }) {
+  const glowRef = useGlowCard<HTMLLIElement>();
   return (
-    <Link to="/project/$slug" params={{ slug: p.slug }} className="group project-card block rounded-lg p-3 transition-transform hover:-translate-y-1">
+    <li ref={glowRef} tabIndex={0} className="how-step-card glow-card">
+      <span className="how-step-number">{number}</span>
+      <div className="how-step-content">
+        <Star className="mx-auto text-rose" size={18} />
+        <h3 className="mt-2 font-display text-2xl font-semibold"><MixedTitle text={step.title} /></h3>
+        <p className="mt-2 text-sm">{step.text}</p>
+      </div>
+    </li>
+  );
+}
+
+export function ProjectCard({ p, onOpen }: { p: Project; onOpen: () => void }) {
+  const glowRef = useGlowCard<HTMLDivElement>();
+  return (
+    <div ref={glowRef} role="button" tabIndex={0} aria-label={`View project: ${p.title}`} onClick={onOpen} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(); } }} className="group project-card glow-card block rounded-lg p-3">
       <article className="project-plate relative p-4">
         <OrnateFrame className="project-ornament" />
         <div className="overflow-hidden rounded-xl border border-rose/40 bg-pearl">
@@ -83,7 +106,7 @@ export function ProjectCard({ p }: { p: Project }) {
           <SafeImage src={p.cover} alt={`${p.title} cover`} className="aspect-video w-full" />
         </div>
         <div className="mt-4 flex items-baseline justify-between gap-3">
-          <h3 className="font-display text-2xl font-semibold group-hover:text-deep-rose"><MixedTitle text={p.title} /></h3>
+          <h3 className="font-display text-2xl font-semibold"><MixedTitle text={p.title} /></h3>
           <span className="font-display italic text-mauve">{p.year}</span>
         </div>
         <p className="text-sm">{p.role} · <span className="italic">{p.status}</span></p>
@@ -91,64 +114,179 @@ export function ProjectCard({ p }: { p: Project }) {
           {p.stack.map((s, i) => <li key={i} className="rounded-full bg-blush px-3 py-0.5 text-xs">{s}</li>)}
         </ul>
       </article>
-    </Link>
+    </div>
   );
 }
 
 export function Portfolio() {
+  const [selected, setSelected] = useState<Project | null>(null);
   return (
     <Chapter n="Five" title="Portfolio" id="work">
-      <div className="grid gap-8 md:grid-cols-2">{projects.map((p) => <ProjectCard key={p.slug} p={p} />)}</div>
+      <div className="grid gap-8 md:grid-cols-2">{projects.map((p) => <ProjectCard key={p.slug} p={p} onOpen={() => setSelected(p)} />)}</div>
+      {selected && <ProjectViewer project={selected} onClose={() => setSelected(null)} />}
     </Chapter>
   );
 }
 
 export function Honors() {
+  const [selected, setSelected] = useState<Award | null>(null);
   return (
     <Chapter n="Six" title="Honors and Awards" id="honors">
       <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {awards.map((a, i) => (
-          <li key={i} className="parchment relative rounded-2xl px-6 pb-6 pt-14 text-center">
-            <div aria-hidden="true" className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-6">
-              <svg width="70" height="90" viewBox="0 0 70 90">
-                <path d="M20 40l-8 46 13-8 8 12 4-50zM50 40l8 46-13-8-8 12-4-50z" fill="var(--baby)" stroke="var(--peri)" />
-                <circle cx="35" cy="32" r="24" fill="var(--rose)" stroke="var(--pearl)" strokeWidth="3" />
-                <circle cx="35" cy="32" r="16" fill="var(--blush)" />
-                <path d="M35 20l3.5 7.5 8 1-6 5.5 1.5 8-7-4-7 4 1.5-8-6-5.5 8-1z" fill="var(--deep-rose)" />
-              </svg>
-            </div>
-            <p className="mt-6 font-display text-sm italic text-mauve">{a.placement}</p>
-            <h3 className="font-display text-2xl font-semibold"><MixedTitle text={a.title} /></h3>
-            <p className="mt-1 text-sm">{a.event} · {a.year}</p>
-          </li>
-        ))}
+        {awards.map((award, index) => <AwardCard key={index} award={award} onOpen={() => setSelected(award)} />)}
       </ul>
+      {selected && <AwardViewer award={selected} onClose={() => setSelected(null)} />}
     </Chapter>
   );
 }
 
+function AwardCard({ award, onOpen }: { award: Award; onOpen: () => void }) {
+  const glowRef = useGlowCard<HTMLDivElement>();
+  return (
+    <li className="min-w-0">
+      <div ref={glowRef} role="button" tabIndex={0} aria-label={`View award: ${award.title}`} onClick={onOpen} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(); } }} className="award-card glow-card relative">
+        <div aria-hidden="true" className="award-medal pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 -translate-y-6">
+          <svg width="70" height="90" viewBox="0 0 70 90">
+            <path d="M20 40l-8 46 13-8 8 12 4-50zM50 40l8 46-13-8-8 12-4-50z" fill="var(--blush)" stroke="var(--rose)" />
+            <circle cx="35" cy="32" r="24" fill="var(--rose)" stroke="var(--pearl)" strokeWidth="3" />
+            <circle cx="35" cy="32" r="16" fill="var(--blush)" />
+            <path d="M35 20l3.5 7.5 8 1-6 5.5 1.5 8-7-4-7 4 1.5-8-6-5.5 8-1z" fill="var(--foil)" />
+          </svg>
+        </div>
+        <div className="award-content">
+          <p className="mt-6 font-display text-sm italic text-mauve">{award.placement}</p>
+          <h3 className="font-display text-2xl font-semibold"><MixedTitle text={award.title} /></h3>
+          <p className="mt-1 text-sm">{award.event} | {award.year}</p>
+        </div>
+      </div>
+    </li>
+  );
+}
+
 export function Certs() {
-  const [open, setOpen] = useState<{ src: string; alt: string } | null>(null);
+  const [selected, setSelected] = useState<Cert | null>(null);
   return (
     <Chapter n="Seven" title="Certifications">
-      <ul className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-        {certs.map((c, i) => (
-          <li key={i}>
-            <Button variant="ghost" onClick={() => setOpen({ src: c.image, alt: c.title })} className={`certificate-card h-auto whitespace-normal w-full rounded-2xl border-4 border-double border-rose bg-gradient-to-b from-blush via-cream to-rose p-3 text-left transition-transform hover:-rotate-1 ${i % 2 ? "md:mt-6" : ""}`}>
-              <SafeImage src={c.image} alt={c.title} className="aspect-[4/3] w-full rounded-lg" />
-              <div className="mt-3 flex items-start justify-between gap-2">
-                <div>
-                  <h3 className="font-display text-lg font-semibold leading-tight"><MixedTitle text={c.title} /></h3>
-                  <p className="text-xs">{c.issuer} · {c.year}</p>
-                </div>
-                <WaxSeal size={30} />
-              </div>
-            </Button>
-          </li>
+      <ul className="certificate-grid">
+        {certs.map((cert) => (
+          <CertificateTicket key={cert.image} cert={cert} onView={() => setSelected(cert)} />
         ))}
       </ul>
-      <Lightbox src={open?.src ?? null} alt={open?.alt ?? ""} onClose={() => setOpen(null)} />
+      {selected && <CertificateViewer cert={selected} onClose={() => setSelected(null)} />}
     </Chapter>
+  );
+}
+
+function CertificateTicket({ cert, onView }: { cert: Cert; onView: () => void }) {
+  const glowRef = useGlowCard<HTMLButtonElement>();
+  const [missing, setMissing] = useState(false);
+  const filename = cert.image.split("/").pop() || cert.image;
+
+  return (
+    <li className="certificate-item">
+      <Button ref={glowRef} variant="ghost" aria-label={`View certificate: ${cert.title}`} onClick={onView} className="certificate-card glow-card">
+        <span className="certificate-image-frame">
+          {missing ? (
+            <span role="img" aria-label={`Missing certificate image: ${filename}`} className="certificate-placeholder">{filename}</span>
+          ) : (
+            <img src={cert.image} alt={cert.title} loading="lazy" onError={() => setMissing(true)} />
+          )}
+          <span className="certificate-frame-inner" aria-hidden="true" />
+          <span className="certificate-frame-corners" aria-hidden="true" />
+          <span className="certificate-seal" aria-hidden="true"><WaxSeal size={40} /></span>
+        </span>
+        <span className="certificate-details">
+          <span className="certificate-title-row"><Star className="certificate-star" size={15} /><span className="certificate-title"><MixedTitle text={cert.title} /></span></span>
+          <span className="certificate-meta"><span className="certificate-issuer">{cert.issuer}</span><span className="certificate-meta-divider" aria-hidden="true" /><span className="certificate-year">{cert.year}</span></span>
+        </span>
+      </Button>
+    </li>
+  );
+}
+
+function CertificateViewer({ cert, onClose }: { cert: Cert; onClose: () => void }) {
+  return (
+    <StoryModal open label={`Certificate: ${cert.title}`} onClose={onClose}>
+      <h3 className="story-modal-heading">{cert.title}</h3>
+      <p className="story-modal-copy">{cert.issuer} | {cert.year}</p>
+      <PortfolioFile file={cert.file} fileType={cert.fileType} title={cert.title} />
+    </StoryModal>
+  );
+}
+
+function AwardViewer({ award, onClose }: { award: Award; onClose: () => void }) {
+  return (
+    <StoryModal open label={`Award: ${award.title}`} onClose={onClose}>
+      <h3 className="story-modal-heading">{award.title}</h3>
+      <p className="story-modal-copy">{award.placement} | {award.event} | {award.year}</p>
+      <PortfolioFile file={award.file} fileType={award.fileType} title={award.title} />
+    </StoryModal>
+  );
+}
+
+function PortfolioFile({ file, fileType, title }: { file?: string; fileType?: "image" | "pdf"; title: string }) {
+  const [zoomed, setZoomed] = useState(false);
+  if (!file) return <p className="story-modal-note">File coming soon</p>;
+  if (fileType === "pdf") return (
+    <>
+      <iframe title={`${title} PDF`} src={file} className="story-modal-frame" />
+      <a href={file} target="_blank" rel="noopener noreferrer" className="story-modal-link">Open in new tab</a>
+    </>
+  );
+  return (
+    <button type="button" aria-label={zoomed ? "Zoom out" : "Zoom image"} onClick={() => setZoomed(!zoomed)} className="story-modal-image-button">
+      <img src={file} alt={title} className={`story-modal-file ${zoomed ? "is-zoomed" : ""}`} />
+    </button>
+  );
+}
+
+function ProjectViewer({ project, onClose }: { project: Project; onClose: () => void }) {
+  const configuredLiveUrl = isConfiguredUrl(project.liveUrl) ? project.liveUrl : "";
+  const canOpenCaseStudy = isConfiguredUrl(project.slug);
+  return (
+    <StoryModal open label={`Project: ${project.title}`} onClose={onClose}>
+      <h3 className="story-modal-heading">{project.title}</h3>
+      <p className="story-modal-copy">{project.role} | {project.year}</p>
+      <p className="mt-3">{project.summary}</p>
+      <ul className="story-modal-chips">{project.stack.map((item) => <li key={item}>{item}</li>)}</ul>
+      <ProjectPreview project={project} liveUrl={configuredLiveUrl} />
+      <div className="story-modal-actions">
+        {configuredLiveUrl && <a href={configuredLiveUrl} target="_blank" rel="noopener noreferrer" className="story-modal-link">Open website</a>}
+        {canOpenCaseStudy && <Link to="/project/$slug" params={{ slug: project.slug }} className="story-modal-link">View case study</Link>}
+      </div>
+    </StoryModal>
+  );
+}
+
+function ProjectPreview({ project, liveUrl }: { project: Project; liveUrl: string }) {
+  const [fallback, setFallback] = useState(!liveUrl);
+  const [imageMissing, setImageMissing] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (!liveUrl) return;
+    setFallback(false);
+    timer.current = setTimeout(() => setFallback(true), 4000);
+    return () => { if (timer.current) clearTimeout(timer.current); };
+  }, [liveUrl]);
+  return (
+    <div className="project-preview">
+      {!fallback && <iframe title={`${project.title} live preview`} src={liveUrl} loading="lazy" sandbox="allow-scripts allow-forms allow-popups" onLoad={() => { if (timer.current) clearTimeout(timer.current); setFallback(false); }} />}
+      {fallback && (imageMissing ? <span className="project-preview-placeholder">{project.cover.split("/").pop() || project.cover}</span> : <img src={project.cover} alt={`${project.title} preview`} loading="lazy" onError={() => setImageMissing(true)} />)}
+    </div>
+  );
+}
+
+function isConfiguredUrl(value: string) {
+  return Boolean(value.trim() && !value.toLowerCase().includes("todo"));
+}
+
+function StackTile({ item }: { item: StackItem }) {
+  const glowRef = useGlowCard<HTMLLIElement>();
+  return (
+    <li ref={glowRef} tabIndex={0} className="stack-tile glow-card">
+      <TechLogo name={item.label} monogram={item.short} />
+      <span className="stack-tile-label">{item.label}</span>
+    </li>
   );
 }
 

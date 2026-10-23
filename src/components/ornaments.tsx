@@ -45,7 +45,7 @@ export function Swan({ className = "", id = "s" }: { className?: string; id?: st
         <linearGradient id={`sw-${id}`} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="var(--pearl)" />
           <stop offset=".55" stopColor="var(--blush)" />
-          <stop offset="1" stopColor="var(--peri)" />
+          <stop offset="1" stopColor="var(--rose)" />
         </linearGradient>
       </defs>
       <path d="M28 18c-6-10 8-16 12-8 3 6-6 14-4 26 2 10 16 14 30 10 10-3 18-14 30-18-6 10-4 20-14 28-14 10-46 10-58-2C16 46 20 34 30 30c4-2 4-6-2-12z" fill={`url(#sw-${id})`} stroke="var(--rose)" strokeWidth=".8" />
@@ -110,9 +110,12 @@ export function useReveal<T extends HTMLElement>() {
 
 export function Chapter({ n, title, id, children }: { n: string; title: string; id?: string; children: ReactNode }) {
   const ref = useReveal<HTMLElement>();
-  const number = { Two: "II", Three: "III", Four: "IV", Five: "V", Six: "VI", Seven: "VII" }[n] ?? n;
-  return <section ref={ref} id={id} className="chapter-page page-in scroll-mt-24">
-    <header className="chapter-header"><span className="chapter-bookmark" aria-hidden="true"/><p className="chapter-eyebrow">Chapter <span className="chapter-numeral font-script">{number}</span></p><h2><MixedTitle text={title} write /></h2><Sparkle className="chapter-sparkle" /></header>
+  const number = ({ One: "1", Two: "2", Three: "3", Four: "4", Five: "5", Six: "6", Seven: "7" } as Record<string, string>)[n] ?? n;
+  return <section ref={ref} id={id} data-page-number={number} className="chapter-page page-in">
+    <span className="chapter-sheet-front" aria-hidden="true" />
+    <span className="chapter-inner-border" aria-hidden="true" />
+    <p className="chapter-running-line" aria-hidden="true">{title}</p>
+    <header className="chapter-header"><span className="chapter-bookmark" aria-hidden="true"/><p className="chapter-number-label"><span className="chapter-numeral font-script">{number}</span></p><h2><MixedTitle text={title} write /></h2><Sparkle className="chapter-sparkle" /></header>
     <div className="chapter-content">{children}</div><span className="page-number" aria-hidden="true">{number}</span><span className="page-curl" aria-hidden="true"/>
   </section>;
 }

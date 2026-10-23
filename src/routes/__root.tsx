@@ -15,6 +15,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Nav, Footer, MusicToggle } from "@/components/Chrome";
 import { FairyCursor } from "@/components/FairyCursor";
 import { Dust } from "@/components/CloudDivider";
+import { BackgroundSwans } from "@/components/BackgroundSwans";
+import { MotionProvider } from "@/hooks/useMotion";
 
 function NotFoundComponent() {
   return (
@@ -94,6 +96,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
+    scripts: [{ children: `try {
+      if (sessionStorage.getItem("erisa-book-opened") === "1") {
+        const stylesheet = [...document.styleSheets].find((sheet) => sheet.href && new URL(sheet.href).origin === location.origin);
+        if (stylesheet) {
+          stylesheet.insertRule(".opening-scene{display:none!important}", stylesheet.cssRules.length);
+          stylesheet.insertRule("body:has(.opening-scene)>:not(.opening-scene){visibility:visible!important;pointer-events:auto!important}", stylesheet.cssRules.length);
+        }
+      }
+    } catch {}` }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -120,12 +131,15 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Dust />
-      <Nav />
-      <Outlet />
-      <Footer />
-      <MusicToggle />
-      <FairyCursor />
+      <MotionProvider>
+        <Dust />
+        <BackgroundSwans />
+        <Nav />
+        <Outlet />
+        <Footer />
+        <MusicToggle />
+        <FairyCursor />
+      </MotionProvider>
     </QueryClientProvider>
   );
 }

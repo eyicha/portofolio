@@ -14,9 +14,9 @@ export function StoryHero() {
     <BlossomBranch className="hero-blossom blossom-left" />
     <BlossomBranch className="hero-blossom blossom-right" flip />
     <div className="hero-heading">
-      <p className="chapter-eyebrow">Chapter <span className="font-script">I</span></p>
+      <span className="chapter-bookmark hero-chapter-bookmark" aria-hidden="true" />
+      <p className="chapter-number-label hero-chapter-label"><span className="chapter-numeral font-script">1</span></p>
       <h1><MixedTitle text="Hi, I'm Erisa" /></h1>
-      <span className="hero-script font-script">fairy tale</span>
       <p className="hero-intro">I turn data into stories and build the systems behind them</p>
     </div>
     <div className="hero-portrait animate-float">
@@ -26,6 +26,7 @@ export function StoryHero() {
     </div>
     <Balustrade className="hero-balustrade" />
     <div className="hero-letter">
+      <div className="hero-letter-floral-frame" aria-hidden="true"><span /><span /><span /><span /></div>
       <p className="letter-caption"><MixedTitle text="About the heroine" /></p>
       {([ ["Name", profile.name], ["Role", profile.role], ["Campus", profile.campus], ["Base", profile.base] ] as const).map(([label, value]) => <p key={label} className="bio-entry"><MixedTitle text={label} className="bio-label" /><span>{value}</span></p>)}
     </div>

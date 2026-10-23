@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { classifyInquiry } from "@/lib/inquiry.functions";
 import { sendLetter } from "@/lib/send-letter.functions";
@@ -7,6 +7,7 @@ import { appendQuestion, inquirySchema, type Suggestion } from "@/lib/inquiry-sc
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
 import { Envelope, WaxSeal, PaperPlane, LaceEdge, Swan, Sparkle, RoseCluster, Cherub } from "./illustrations";
+import { useMotionSetting, useScrollProgress } from "@/hooks/useMotion";
 
 export function ContactLetter() {
   const [phase, setPhase] = useState<"writing" | "flying" | "done">("writing");
@@ -16,6 +17,7 @@ export function ContactLetter() {
   const [error, setError] = useState("");
   const [result, setResult] = useState<Suggestion | null>(null);
   const form = useRef<HTMLFormElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
   const suggest = useServerFn(classifyInquiry);
   const send = useServerFn(sendLetter);
   const updateValidity = () => {
@@ -52,7 +54,7 @@ export function ContactLetter() {
     <div className="contact-heading"><p className="chapter-eyebrow">Epilogue</p><h2><MixedTitle text="Contact" /></h2></div>
     <Cherub className="contact-cherub" />
     <RoseCluster className="contact-rose" flip />
-    <div className={`letter-stage letter-${phase}`}>
+    <div ref={stage} className={`letter-stage letter-${phase}`}>
       <form ref={form} onInput={updateValidity} onChange={updateValidity} onSubmit={e => { e.preventDefault(); void submit(); }} className="love-letter" aria-hidden={phase !== "writing"} inert={phase !== "writing"}>
         <LaceEdge className="letter-lace" />
         <p className="dear-erisa font-script">Dear Erisa,</p>
@@ -72,7 +74,7 @@ export function ContactLetter() {
       {phase === "flying" && <div className="letter-flight" aria-label="Your letter folds and flies away">
         <div className="flight-envelope"><Envelope /><WaxSeal className="flight-seal" /><LaceEdge className="flight-lace" /></div>
         <PaperPlane className="flight-plane" />
-        <Swan className="flight-swan" variant="resting" />
+        <FlightSwan sourceRef={stage} />
         <svg aria-hidden="true" className="flight-trail" viewBox="0 0 400 500"><path d="M190 400Q385 300 175 200T250 0" stroke="var(--rose)" strokeWidth="2" fill="none"/></svg>
         <Sparkle className="flight-sparkle" animate />
         <Button variant="link" className="skip-flight" onClick={() => setPhase("done")}>Skip animation</Button>
@@ -87,4 +89,11 @@ export function ContactLetter() {
       field.value = next; field.dispatchEvent(new Event("input", { bubbles: true })); field.focus(); setError("");
     }}>{question}</Button>)}</div><h3>AI draft reply (for Erisa)</h3><blockquote>{result.suggestion}</blockquote></aside>}
   </section>;
+}
+
+function FlightSwan({ sourceRef }: { sourceRef: RefObject<HTMLDivElement | null> }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { mode } = useMotionSetting();
+  useScrollProgress(ref, mode === "full", { sourceRef, glide: true, direction: -1 });
+  return <div ref={ref} className="flight-swan swan-scroll-transform"><Swan variant="resting" /></div>;
 }

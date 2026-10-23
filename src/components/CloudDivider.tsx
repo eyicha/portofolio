@@ -1,36 +1,30 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Cloud, Swan, Sparkle } from "./illustrations";
+import { useMotionSetting, useScrollProgress } from "@/hooks/useMotion";
 
-export function CloudDivider({ swan = false, flip = false, id = "a" }: { swan?: boolean; flip?: boolean; id?: string }) {
+export function CloudDivider({ swan = true, flip, id = "a" }: { swan?: boolean; flip?: boolean; id?: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  const divider = useRef<HTMLDivElement>(null);
+  const [dividerIndex, setDividerIndex] = useState(0);
+  const { mode } = useMotionSetting();
   useEffect(() => {
-    if (!swan || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const el = ref.current;
-    if (!el) return;
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const parent = el.parentElement;
-        if (!parent) return;
-        const r = parent.getBoundingClientRect();
-        const p = (window.innerHeight - r.top) / (window.innerHeight + r.height);
-        el.style.transform = `translateX(-50%) translateY(${Math.sin(p * 6) * 6}px)`;
-      });
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", onScroll); };
-  }, [swan, flip]);
+    const element = divider.current;
+    if (!element?.parentElement) return;
+    const dividers = Array.from(element.parentElement.querySelectorAll<HTMLElement>(":scope > .cloud-divider"));
+    setDividerIndex(dividers.indexOf(element));
+  }, []);
+  const facingRight = flip ?? dividerIndex % 2 === 1;
+  useScrollProgress(ref, swan && mode === "full", { sourceRef: divider, glide: true, direction: facingRight ? 1 : -1 });
 
   return (
-    <div aria-hidden="true" className="pointer-events-none cloud-divider relative h-32 overflow-hidden md:h-32">
+    <div ref={divider} aria-hidden="true" className="pointer-events-none cloud-divider relative h-32 md:h-32">
       <Cloud className="absolute bottom-0 h-16 w-[140%] -translate-x-[10%] opacity-70" />
       <Cloud className="absolute bottom-0 h-10 w-full" />
       {swan && (
-        <div ref={ref} className="absolute divider-swan will-change-transform">
+        <div ref={ref} className="absolute divider-swan swan-scroll-transform will-change-transform">
+          <span className="divider-swan-wake" aria-hidden="true"><i /><i /><i /></span>
           <Sparkle className="swan-trail" animate />
-          <Swan flip={flip} variant={id === "b" ? "resting" : undefined} className="w-full" />
+          <Swan flip={facingRight} variant={dividerIndex % 2 === 1 || id === "b" ? "resting" : undefined} className="w-full" />
         </div>
       )}
     </div>

@@ -2,7 +2,7 @@ import { useId } from "react";
 import { Button } from "./ui/button";
 
 /** One cover for the invitation and colophon scenes. */
-export function Storybook({ open = false, onBookmark }: { open?: boolean; onBookmark?: () => void }) {
+export function Storybook({ open = false, onBookmark, subtitle = "A portfolio in seven chapters" }: { open?: boolean; onBookmark?: () => void; subtitle?: string }) {
   const id = useId().replace(/:/g, "");
   return <div className={`storybook ${open ? "storybook-open" : ""}`}>
     <div className="storybook-page-edges" aria-hidden="true"><span /><span /><span /></div>
@@ -36,7 +36,7 @@ export function Storybook({ open = false, onBookmark }: { open?: boolean; onBook
       <div className="storybook-spine" aria-hidden="true"><i/><i/><i/></div>
       <div className="storybook-star" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 0Q23 17 40 20Q23 23 20 40Q17 23 0 20Q17 17 20 0Z" fill="var(--foil-light)"/></svg></div>
       <div className="storybook-plaque"><div className="plaque-lace" aria-hidden="true"/><h2 className="storybook-title"><span>Erisa's</span><span>Fairy Tale</span></h2></div>
-      <p className="storybook-subtitle">A portfolio in seven chapters</p>
+      <p className="storybook-subtitle">{subtitle}</p>
       <div className="storybook-clasp" aria-hidden="true"><svg viewBox="0 0 25 42"><rect x="1" y="1" width="23" height="40" rx="7" fill="var(--foil)" stroke="var(--foil-light)"/><circle cx="12.5" cy="15" r="4" fill="var(--deep-rose)"/><path d="M11 17H14L17 28H8Z" fill="var(--deep-rose)"/></svg></div>
       {onBookmark ? <Button variant="ghost" className="storybook-bookmark" aria-label="Back to the first page" onClick={onBookmark}><BookmarkCharm /></Button> : <div className="storybook-bookmark" aria-hidden="true"><BookmarkCharm /></div>}
       <div className="storybook-glitter" aria-hidden="true">{Array.from({length:14},(_,i)=><svg key={i} className={`book-glint book-glint-${i}`} viewBox="0 0 10 10"><path d="M5 0L6 4L10 5L6 6L5 10L4 6L0 5L4 4Z" fill="currentColor"/></svg>)}</div>

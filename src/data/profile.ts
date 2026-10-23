@@ -22,7 +22,8 @@ export const profile = {
 export const steps = [
   { title: "Understand", text: "TODO: Ask who the work is for and what question it should answer." },
   { title: "Explore", text: "TODO: Look at the data and the constraints before choosing tools." },
+  { title: "Adapt", text: "When a project needs a tool or a domain I have not used before, I read the documentation, build a small test first, and ask for help early. I pick things up quickly and I keep my notes so the next time is faster." },
   { title: "Build", text: "TODO: Write the queries, models or services in small, readable pieces." },
-  { title: "Test", text: "TODO: Check results against real cases and fix what breaks." },
+  { title: "Review", text: "TODO: Check results against real cases and fix what breaks." },
   { title: "Deliver", text: "TODO: Hand over clear docs, a short story of the findings, and next steps." },
 ];

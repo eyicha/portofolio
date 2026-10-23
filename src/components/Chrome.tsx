@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { socials } from "@/data/socials";
 import { MixedTitle } from "./MixedTitle";
 import { ContactLetter } from "./ContactLetter";
@@ -72,19 +73,86 @@ function SocialIcon({ icon }: { icon: string }) {
  return <svg viewBox="0 0 24 24" aria-hidden="true">{icon === "instagram" ? <><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="2.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="2.5"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></> : <path d={paths[icon]} fill="currentColor" fillRule="evenodd"/>}</svg>;
 }
 
-export function Lightbox({ src, alt, onClose }: { src: string | null; alt: string; onClose: () => void }) {
+export function StoryModal({ open, label, onClose, children }: { open: boolean; label: string; onClose: () => void; children: ReactNode }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialogRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], iframe, [tabindex]:not([tabindex="-1"])') ?? []);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!first || !last || !focusable.includes(document.activeElement as HTMLElement)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first ?? dialogRef.current)?.focus();
+      } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
+    };
+  }, [open, onClose]);
+  if (!open) return null;
+  return createPortal(
+    <div role="dialog" aria-modal="true" aria-label={label} className="story-modal-backdrop" onClick={onClose}>
+      <div ref={dialogRef} tabIndex={-1} className="story-modal-panel" onClick={(event) => event.stopPropagation()}>
+        <Button variant="ghost" className="story-modal-close" onClick={onClose} aria-label="Close dialog">Close</Button>
+        {children}
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+export function Lightbox({ src, alt, caption, trapFocus = false, onClose }: { src: string | null; alt: string; caption?: string; trapFocus?: boolean; onClose: () => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!src) return;
-    const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    addEventListener("keydown", k);
-    return () => removeEventListener("keydown", k);
-  }, [src, onClose]);
+    const previousFocus = trapFocus && document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    if (trapFocus) dialogRef.current?.focus();
+    const k = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key !== "Tab" || !trapFocus) return;
+      const focusable = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])') ?? []);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!first || !last || !focusable.includes(document.activeElement as HTMLElement)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first ?? dialogRef.current)?.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", k);
+    return () => {
+      document.removeEventListener("keydown", k);
+      previousFocus?.focus();
+    };
+  }, [src, onClose, trapFocus]);
   if (!src) return null;
   return (
-    <div role="dialog" aria-modal="true" aria-label={alt} onClick={onClose} className="fixed inset-0 z-[95] flex items-center justify-center bg-plum/70 p-6">
-      <div onClick={(e) => e.stopPropagation()} className="parchment ornate max-h-[85vh] max-w-3xl rounded-2xl p-4">
+    <div role="dialog" aria-modal="true" aria-label={alt} onClick={onClose} className="fixed inset-0 z-[10002] flex items-center justify-center bg-plum/70 p-6">
+      <div ref={dialogRef} tabIndex={trapFocus ? -1 : undefined} onClick={(e) => e.stopPropagation()} className="parchment ornate max-h-[85vh] max-w-3xl rounded-2xl p-4">
         <img src={src} alt={alt} className="max-h-[70vh] w-full rounded-lg object-contain" onError={(e) => ((e.target as HTMLImageElement).alt = `${alt} (missing: ${src})`)} />
-        <Button variant="ghost" onClick={onClose} className="mt-3 w-full text-deep-rose"><MixedTitle text="Close" /></Button>
+        {caption && <p className="lightbox-caption">{caption}</p>}
+        <Button variant="ghost" onClick={onClose} className={`mt-3 ${trapFocus ? "min-h-11" : ""} w-full text-deep-rose`}><MixedTitle text="Close" /></Button>
       </div>
     </div>
   );

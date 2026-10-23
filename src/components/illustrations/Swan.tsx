@@ -1,7 +1,7 @@
 import { ArtFrame, type ArtProps } from "./ArtFrame";
 export function Swan({ variant, ...props }: ArtProps) {
   return <ArtFrame name="Swan" viewBox="0 0 260 180" transparentGrain {...props}>{id => <>
-    <defs><linearGradient id={`${id}-swan`} x1=".2" y1="0" x2=".7" y2="1"><stop stopColor="var(--pearl)"/><stop offset=".35" stopColor="var(--cream)"/><stop offset=".68" stopColor="var(--blush)"/><stop offset="1" stopColor="var(--mauve)"/></linearGradient></defs>
+    <defs><linearGradient id={`${id}-swan`} x1=".2" y1="0" x2=".7" y2="1"><stop stopColor="var(--pearl)"/><stop offset=".35" stopColor="var(--cream)"/><stop offset=".68" stopColor="var(--blush)"/><stop offset="1" stopColor="var(--rose)"/></linearGradient></defs>
     <ellipse cx="141" cy="156" rx="88" ry="5" fill="var(--rose)" opacity=".15"/>
     <path d="M51 47C16 24 40 6 64 17C93 30 77 61 61 86C40 117 67 142 109 139C153 138 204 108 235 101C244 126 225 150 195 157C146 170 76 164 54 147C29 127 34 104 49 86C64 68 71 50 60 40C53 33 42 37 51 47Z" fill={`url(#${id}-swan)`} stroke="var(--blush)" strokeWidth="1.5"/>
     <path d="M72 128Q113 74 225 98Q207 143 123 150Q93 146 72 128Z" fill={`url(#${id}-swan)`} stroke="var(--pearl)" strokeWidth="2"/>

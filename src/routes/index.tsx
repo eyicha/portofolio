@@ -28,11 +28,11 @@ function Index() {
         <About />
         <CloudDivider />
         <Stack />
-        <CloudDivider swan flip id="b" />
+        <CloudDivider swan id="b" />
         <HowIWork />
         <CloudDivider />
         <Portfolio />
-        <CloudDivider swan id="c" />
+        <CloudDivider swan flip id="c" />
         <Honors />
         <CloudDivider />
         <Certs />
