@@ -1,8 +1,51 @@
-export type Cert = { title: string; issuer: string; year: string; image: string; file?: string; fileType?: "image" | "pdf" };
+export type Cert = { title: string; issuer: string; year: string; image: string; file: string; fileType: "image" | "pdf"; date?: string; credentialId?: string; note?: string };
 
-export const certs: Cert[] = [1, 2, 3, 4].map((n) => ({
-  title: `TODO Certificate ${n}`,
-  issuer: "TODO Issuer",
-  year: "TODO",
-  image: `/images/certs/${n}.png`,
-}));
+export const certs: Cert[] = [
+  {
+    title: "Google Gemini AI Student",
+    issuer: "Gemini",
+    year: "2026",
+    date: "Issued Sep 2026, expires Sep 2029",
+    image: "/images/certs/1.png",
+    file: "/images/certs/1.png",
+    fileType: "image",
+  },
+  {
+    title: "think-cell Certified Professional",
+    issuer: "think-cell Software",
+    year: "2026",
+    date: "Issued Sep 2026",
+    credentialId: "think-cell CP",
+    note: "Earned after following the DWDG BCC SEA webinar",
+    image: "/images/certs/2.png",
+    file: "/images/certs/2.png",
+    fileType: "image",
+  },
+  {
+    title: "Seven Habits",
+    issuer: "",
+    year: "2024",
+    date: "August 2024",
+    image: "/images/certs/3.png",
+    file: "/images/certs/3.png",
+    fileType: "image",
+  },
+  {
+    title: "Motion Graphics Editing",
+    issuer: "",
+    year: "2025",
+    date: "May 2025",
+    image: "/images/certs/4.png",
+    file: "/images/certs/4.png",
+    fileType: "image",
+  },
+  {
+    title: "UI/UX Design",
+    issuer: "Skilvul",
+    year: "2025",
+    date: "January 2025",
+    image: "/images/certs/5.png",
+    file: "/images/certs/5.png",
+    fileType: "image",
+  },
+];

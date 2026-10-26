@@ -108,15 +108,15 @@ export function useReveal<T extends HTMLElement>() {
   return ref;
 }
 
-export function Chapter({ n, title, id, children }: { n: string; title: string; id?: string; children: ReactNode }) {
+export function Chapter({ n, title, id, children, numberless = false }: { n: string; title: string; id?: string; children: ReactNode; numberless?: boolean }) {
   const ref = useReveal<HTMLElement>();
   const number = ({ One: "1", Two: "2", Three: "3", Four: "4", Five: "5", Six: "6", Seven: "7" } as Record<string, string>)[n] ?? n;
   return <section ref={ref} id={id} data-page-number={number} className="chapter-page page-in">
     <span className="chapter-sheet-front" aria-hidden="true" />
     <span className="chapter-inner-border" aria-hidden="true" />
     <p className="chapter-running-line" aria-hidden="true">{title}</p>
-    <header className="chapter-header"><span className="chapter-bookmark" aria-hidden="true"/><p className="chapter-number-label"><span className="chapter-numeral font-script">{number}</span></p><h2><MixedTitle text={title} write /></h2><Sparkle className="chapter-sparkle" /></header>
-    <div className="chapter-content">{children}</div><span className="page-number" aria-hidden="true">{number}</span><span className="page-curl" aria-hidden="true"/>
+    <header className="chapter-header"><span className="chapter-bookmark" aria-hidden="true"/>{!numberless && <p className="chapter-number-label"><span className="chapter-numeral font-script">{number}</span></p>}<h2><MixedTitle text={title} write /></h2><Sparkle className="chapter-sparkle" /></header>
+    <div className="chapter-content">{children}</div>{!numberless && <span className="page-number" aria-hidden="true">{number}</span>}<span className="page-curl" aria-hidden="true"/>
   </section>;
 }
 

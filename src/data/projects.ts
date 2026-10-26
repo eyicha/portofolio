@@ -15,21 +15,73 @@ export type Project = {
   screenshots: string[];
 };
 
-const make = (n: number): Project => ({
-  slug: `project-${n}`,
-  title: `TODO Project ${n}`,
-  year: "TODO",
-  role: n % 2 ? "Data Analyst" : "Backend Engineer",
-  status: "TODO",
-  summary: "TODO: One sentence on what this project does and who it helps.",
-  problem: "TODO: What was broken, slow or unclear before this project.",
-  solution: "TODO: What you built and the key decision behind it.",
-  features: ["TODO feature one", "TODO feature two", "TODO feature three"],
-  stack: ["TODO", "TODO"],
-  liveUrl: "",
-  githubUrl: "",
-  cover: `/images/projects/project-${n}.png`,
-  screenshots: [`/images/projects/project-${n}-1.png`, `/images/projects/project-${n}-2.png`],
-});
-
-export const projects: Project[] = [1, 2, 3, 4].map(make);
+export const projects: Project[] = [
+  // TODO: add liveUrl, githubUrl, problem, solution, features
+  {
+    slug: "villa-swarna-mandapa",
+    title: "Villa Swarna Mandapa",
+    year: "2026",
+    role: "Project coordination",
+    status: "Completed",
+    summary: "Coordinated project planning and task distribution to support the development process.",
+    problem: "",
+    solution: "",
+    features: [],
+    stack: ["Project Management", "Web Development"],
+    liveUrl: "",
+    githubUrl: "",
+    cover: "/images/projects/villa-swarna-mandapa/cover.png",
+    screenshots: ["/images/projects/villa-swarna-mandapa/1.png", "/images/projects/villa-swarna-mandapa/2.png", "/images/projects/villa-swarna-mandapa/3.png"],
+  },
+  // TODO: add liveUrl, githubUrl, problem, solution, features
+  {
+    slug: "adil",
+    title: "ADIL: Competition Work Similarity Detection",
+    year: "",
+    role: "Backend contributor",
+    status: "",
+    summary: "Contributed to backend development for a web-based platform for competition work similarity detection.",
+    problem: "",
+    solution: "",
+    features: [],
+    stack: ["Back-End Web Development", "Web Development"],
+    liveUrl: "",
+    githubUrl: "",
+    cover: "/images/projects/adil/cover.png",
+    screenshots: ["/images/projects/adil/1.png", "/images/projects/adil/2.png", "/images/projects/adil/3.png"],
+  },
+  // TODO: add liveUrl, githubUrl, problem, solution, features
+  {
+    slug: "kilau-build",
+    title: "KILAU Build",
+    year: "",
+    role: "Backend contributor",
+    status: "",
+    summary: "Contributed to the development of the KILAU project by supporting selected backend functionality.",
+    problem: "",
+    solution: "",
+    features: [],
+    stack: ["Testing", "User Interface Design"],
+    liveUrl: "",
+    githubUrl: "",
+    cover: "/images/projects/kilau-build/cover.png",
+    screenshots: ["/images/projects/kilau-build/1.png", "/images/projects/kilau-build/2.png", "/images/projects/kilau-build/3.png"],
+  },
+  // TODO: add liveUrl, githubUrl, problem, solution, features
+  {
+    slug: "sentra",
+    title: "SENTRA: Regional Data Analysis and Geospatial Mapping",
+    year: "",
+    role: "Project coordination",
+    status: "",
+    summary: "Managed project coordination and task distribution to support the team's project objectives.",
+    problem: "",
+    solution: "",
+    features: [],
+    stack: ["Data Analysis", "Geographic Information Systems (GIS)"],
+    liveUrl: "",
+    githubUrl: "",
+    cover: "/images/projects/sentra/cover.png",
+    screenshots: ["/images/projects/sentra/1.png", "/images/projects/sentra/2.png", "/images/projects/sentra/3.png"],
+  },
+];

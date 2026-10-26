@@ -2,9 +2,9 @@ import { useId } from "react";
 import { Button } from "./ui/button";
 
 /** One cover for the invitation and colophon scenes. */
-export function Storybook({ open = false, onBookmark, subtitle = "A portfolio in seven chapters" }: { open?: boolean; onBookmark?: () => void; subtitle?: string }) {
+export function Storybook({ open = false, onBookmark, subtitle = "A portfolio in seven chapters", calmCover = false }: { open?: boolean; onBookmark?: () => void; subtitle?: string; calmCover?: boolean }) {
   const id = useId().replace(/:/g, "");
-  return <div className={`storybook ${open ? "storybook-open" : ""}`}>
+  return <div className={`storybook ${open ? "storybook-open" : ""} ${calmCover ? "storybook-calm" : ""}`}>
     <div className="storybook-page-edges" aria-hidden="true"><span /><span /><span /></div>
     <div className="storybook-inner-page" aria-hidden="true" />
     <div className="storybook-leaf" aria-hidden="true" />
@@ -12,7 +12,7 @@ export function Storybook({ open = false, onBookmark, subtitle = "A portfolio in
       <svg className="storybook-decoration" viewBox="0 0 400 560" preserveAspectRatio="none" aria-hidden="true">
         <defs>
           <linearGradient id={`${id}-cloth`} x2="1" y2="1"><stop stopColor="var(--rose)"/><stop offset=".48" stopColor="var(--deep-rose)"/><stop offset="1" stopColor="var(--rose)"/></linearGradient>
-          <linearGradient id={`${id}-gold`}><stop stopColor="var(--foil)"/><stop offset=".45" stopColor="var(--foil-light)"/><stop offset=".65" stopColor="var(--cream)"/><stop offset="1" stopColor="var(--foil)"/></linearGradient>
+          <linearGradient id={`${id}-gold`}><stop stopColor="var(--foil)"/><stop offset=".45" stopColor={calmCover ? "var(--foil)" : "var(--foil-light)"}/><stop offset=".65" stopColor={calmCover ? "var(--foil)" : "var(--cream)"}/><stop offset="1" stopColor="var(--foil)"/></linearGradient>
           <radialGradient id={`${id}-petal`} cx=".3" cy=".2"><stop stopColor="var(--pearl)"/><stop offset=".4" stopColor="var(--blush)"/><stop offset="1" stopColor="var(--deep-rose)"/></radialGradient>
           <filter id={`${id}-linen`}><feTurbulence type="fractalNoise" baseFrequency=".8 .07" numOctaves="2" seed="7" result="warp"/><feTurbulence type="fractalNoise" baseFrequency=".06 .8" numOctaves="2" seed="9" result="weft"/><feBlend in="warp" in2="weft" mode="multiply"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".16"/></feComponentTransfer><feBlend in="SourceGraphic" mode="soft-light"/></filter>
           <g id={`${id}-flower`}>
@@ -34,13 +34,13 @@ export function Storybook({ open = false, onBookmark, subtitle = "A portfolio in
         <path d="M44 421Q32 408 33 422Q39 430 44 421Z" fill="var(--sage)"/>
       </svg>
       <div className="storybook-spine" aria-hidden="true"><i/><i/><i/></div>
-      <div className="storybook-star" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 0Q23 17 40 20Q23 23 20 40Q17 23 0 20Q17 17 20 0Z" fill="var(--foil-light)"/></svg></div>
+      {!calmCover && <div className="storybook-star" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 0Q23 17 40 20Q23 23 20 40Q17 23 0 20Q17 17 20 0Z" fill="var(--foil-light)"/></svg></div>}
       <div className="storybook-plaque"><div className="plaque-lace" aria-hidden="true"/><h2 className="storybook-title"><span>Erisa's</span><span>Fairy Tale</span></h2></div>
       <p className="storybook-subtitle">{subtitle}</p>
       <div className="storybook-clasp" aria-hidden="true"><svg viewBox="0 0 25 42"><rect x="1" y="1" width="23" height="40" rx="7" fill="var(--foil)" stroke="var(--foil-light)"/><circle cx="12.5" cy="15" r="4" fill="var(--deep-rose)"/><path d="M11 17H14L17 28H8Z" fill="var(--deep-rose)"/></svg></div>
       {onBookmark ? <Button variant="ghost" className="storybook-bookmark" aria-label="Back to the first page" onClick={onBookmark}><BookmarkCharm /></Button> : <div className="storybook-bookmark" aria-hidden="true"><BookmarkCharm /></div>}
-      <div className="storybook-glitter" aria-hidden="true">{Array.from({length:14},(_,i)=><svg key={i} className={`book-glint book-glint-${i}`} viewBox="0 0 10 10"><path d="M5 0L6 4L10 5L6 6L5 10L4 6L0 5L4 4Z" fill="currentColor"/></svg>)}</div>
-      <div className="storybook-highlight" aria-hidden="true"/>
+      {!calmCover && <div className="storybook-glitter" aria-hidden="true">{Array.from({length:14},(_,i)=><svg key={i} className={`book-glint book-glint-${i}`} viewBox="0 0 10 10"><path d="M5 0L6 4L10 5L6 6L5 10L4 6L0 5L4 4Z" fill="currentColor"/></svg>)}</div>}
+      {!calmCover && <div className="storybook-highlight" aria-hidden="true"/>}
     </div>
   </div>;
 }

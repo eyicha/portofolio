@@ -2,7 +2,7 @@ export const profile = {
   name: "Erisa Salsabila",
   role: "Data Analyst & Backend Engineer",
   campus: "IPB University, Software Engineering",
-  base: "TODO",
+  base: "Bogor, West Java",
   photo: "/images/erisa.png",
   cvUrl: "#TODO-cv-link",
   email: "TODO@email.com",
@@ -12,18 +12,7 @@ export const profile = {
     github: "https://github.com/eyicha",
     instagram: "https://www.instagram.com/erisabyla",
   },
-  bio: "TODO: Two or three sentences about who you are, what you study at IPB University, and what kind of problems you like to work on.",
-  direction:
-    "I am growing toward two roles that meet in the middle: data analyst, reading what the numbers say, and backend engineer, building the services that keep those numbers honest.",
-  otherExperience: "TODO: One line about other experience (organizations, freelance, volunteering).",
-  fnb: "My F&B crew internship taught me teamwork on a busy floor and how to stay calm and accurate under pressure.",
+  bio: "I am a Software Engineering student at IPB University, building a career in data analysis and backend engineering. Python and SQL are my daily tools, and I care as much about the question behind a dataset as about the code that answers it.",
+  direction: "My projects show how I work. I wrote backend code for ADIL and KILAU, project manager for Villa Swarna Mandapa and SENTRA (also a data analyst too!), and I now serve as Project Manager for four client projects at Do Well Do Good Future Leaders, IPB University Chapter. I am the one who keeps the plan, the team and the deadline moving in the same direction.",
+  otherExperience: "Away from the keyboard, I lead and I write. I served as Head of Department D at the Student Representative Council of Sekolah Vokasi IPB University, I am a member of Google Developer Group on Campus IPB University, a contributing poet in a 2026 anthology, and the author of a usability study of the IPB DiSign platform. I have placed in essay and startup competitions, and a crew job at McDonald's taught me to stay calm and accurate when the floor gets busy.",
 };
-
-export const steps = [
-  { title: "Understand", text: "TODO: Ask who the work is for and what question it should answer." },
-  { title: "Explore", text: "TODO: Look at the data and the constraints before choosing tools." },
-  { title: "Adapt", text: "When a project needs a tool or a domain I have not used before, I read the documentation, build a small test first, and ask for help early. I pick things up quickly and I keep my notes so the next time is faster." },
-  { title: "Build", text: "TODO: Write the queries, models or services in small, readable pieces." },
-  { title: "Review", text: "TODO: Check results against real cases and fix what breaks." },
-  { title: "Deliver", text: "TODO: Hand over clear docs, a short story of the findings, and next steps." },
-];

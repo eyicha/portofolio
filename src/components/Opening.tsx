@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Storybook } from "./Storybook";
 import { OpeningGarden } from "./OpeningGarden";
+import { LandingSparkles } from "./LandingSparkles";
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
 import { LaceEdge, WaxSeal } from "./illustrations";
@@ -27,7 +28,6 @@ function markOpenedThisSession() {
 
 export function Opening() {
   const [phase, setPhase] = useState<Phase>("closed");
-  const scene = useRef<HTMLDivElement>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const clear = () => { timers.current.forEach(clearTimeout); timers.current = []; };
   const finish = () => {
@@ -56,33 +56,17 @@ export function Opening() {
     window.addEventListener("erisa-replay", replay);
     return () => window.removeEventListener("erisa-replay", replay);
   }, []);
-  useEffect(() => {
-    const el = scene.current;
-    if (!el || phase !== "closed" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let frame = 0;
-    const highlight = (x: number, y: number) => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => { el.style.setProperty("--light-x", `${x}%`); el.style.setProperty("--light-y", `${y}%`); });
-    };
-    const pointer = (e: PointerEvent) => highlight(e.clientX / innerWidth * 100, e.clientY / innerHeight * 100);
-    const tilt = (e: DeviceOrientationEvent) => { if (e.gamma !== null && e.beta !== null) highlight(Math.max(10, Math.min(90, 50 + e.gamma)), Math.max(10, Math.min(90, 50 + e.beta / 2))); };
-    const scroll = () => highlight(50, 30 + Math.min(50, scrollY / 10));
-    el.addEventListener("pointermove", pointer);
-    window.addEventListener("deviceorientation", tilt);
-    window.addEventListener("scroll", scroll, { passive: true });
-    return () => { cancelAnimationFrame(frame); el.removeEventListener("pointermove", pointer); window.removeEventListener("deviceorientation", tilt); window.removeEventListener("scroll", scroll); };
-  }, [phase]);
   if (phase === "done") return null;
-  return <div ref={scene} role="dialog" aria-modal="true" aria-label="Storybook opening" className={`opening-scene opening-${phase}`}>
+  return <div role="dialog" aria-modal="true" aria-label="Storybook opening" className={`opening-scene opening-${phase}`}>
     <OpeningGarden />
+    <LandingSparkles scene="opening" />
     <a className="opening-skip" href="#" onClick={event => { event.preventDefault(); finish(); }}>Skip</a>
-    <div className="opening-book-stage"><Storybook open={phase !== "closed" && phase !== "spinning"} subtitle="A portfolio, told as a storybook"/></div>
+    <div className="opening-book-stage"><Storybook open={phase !== "closed" && phase !== "spinning"} calmCover subtitle="A portfolio, told as a storybook"/></div>
     <Button className="open-book-button" aria-label="Open the book" onClick={() => run()} disabled={phase !== "closed"}>
       <span className="open-book-seal"><WaxSeal/><span className="seal-glow-ring" aria-hidden="true"/><svg className="seal-edge-sparkle" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8Z"/></svg></span>
       <span className="open-book-label"><MixedTitle text="Open the book"/></span>
       <span className="seal-burst" aria-hidden="true">{Array.from({ length: 8 }, (_, index) => <svg key={index} className={`seal-burst-sparkle seal-burst-${index}`} viewBox="0 0 20 20"><path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8Z"/></svg>)}</span>
     </Button>
-    <div className="opening-light" aria-hidden="true"/>
     {(phase === "invite" || phase === "zoom") && <div className="opening-invitation" role="status"><LaceEdge className="invitation-lace"/><p>You are cordially invited</p><p className="invitation-script">into the story</p><WaxSeal className="invitation-seal"/></div>}
   </div>;
 }

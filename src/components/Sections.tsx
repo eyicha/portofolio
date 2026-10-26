@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { profile, steps } from "@/data/profile";
+import { profile } from "@/data/profile";
+import { howIWorkSteps } from "@/data/how-i-work";
 import { stack, type StackItem } from "@/data/stack";
 import { projects, type Project } from "@/data/projects";
 import { awards, type Award } from "@/data/awards";
@@ -18,75 +19,91 @@ export { StoryHero as Hero } from "./StoryHero";
 export function About() {
   return (
     <Chapter n="Two" title="About Me" id="story">
-      <div className="mx-auto max-w-3xl">
+      <div className="about-copy">
         <div className="space-y-5 p-2 text-lg leading-relaxed md:p-6">
-          <p><span className="float-left mr-2 font-script text-6xl leading-none text-deep-rose">O</span>nce upon a time. {profile.bio}</p>
-          <p>{profile.direction}</p>
-          <p className="text-base">{profile.otherExperience} <a href={profile.links.linkedin} className="text-deep-rose underline underline-offset-4">See LinkedIn</a></p>
-          <p className="text-base">{profile.fnb}</p>
+          <p className="about-lead">I work where numbers meet people.</p>
+          <p><span className="float-left mr-2 font-script text-6xl leading-none text-deep-rose">{profile.bio.charAt(0)}</span><HighlightPhrase text={profile.bio.slice(1)} phrase="data analysis and backend engineering" /></p>
+          <p><HighlightPhrase text={profile.direction} phrase="Project Manager for four client projects" /></p>
+          <p className="text-base"><HighlightPhrase text={profile.otherExperience} phrase="Head of Department D" /> <a href="https://www.linkedin.com/in/erisa-salsabila" target="_blank" rel="noopener noreferrer" className="text-deep-rose underline underline-offset-4">See LinkedIn</a> for the full timeline.</p>
         </div>
       </div>
     </Chapter>
   );
 }
 
+function HighlightPhrase({ text, phrase }: { text: string; phrase: string }) {
+  const start = text.indexOf(phrase);
+  if (start === -1) return text;
+  const end = start + phrase.length;
+  return <>{text.slice(0, start)}<mark className="text-highlight">{phrase}</mark>{text.slice(end)}</>;
+}
+
 export function Stack() {
-  const areas = stack.filter((shelf) => shelf.shelf !== "Everyday tools");
-  const everydayTools = stack.find((shelf) => shelf.shelf === "Everyday tools");
   const subtitles: Record<string, string> = {
     Frontend: "What I build screens with",
     Backend: "What powers my services",
     "Data Analyst": "How I read and explain data",
+    "Everyday tools": "Tools I reach for every day",
   };
   return (
     <Chapter n="Three" title="Stack and Tools" id="stack">
       <div className="stack-area-grid">
-        {areas.map((s) => (
+        {stack.map((s) => (
           <section key={s.shelf} className="stack-shelf">
-            <h3 className="stack-area-heading"><MixedTitle text={s.shelf} /></h3>
-            <span className="stack-area-rule" aria-hidden="true" />
-            <p className="stack-area-subtitle">{subtitles[s.shelf]}</p>
+            <header className="stack-shelf-header">
+              <h3 className="stack-area-heading"><MixedTitle text={s.shelf} /></h3>
+              <p className="stack-area-subtitle">{subtitles[s.shelf]}</p>
+            </header>
             <div className="stack-groups">
-              {[...new Set(s.items.map((item) => item.group))].map((group) => (
-                <section key={group} className="stack-item-group">
-                  <h4 className="stack-group-heading">{group}</h4>
-                  <ul className="stack-tile-grid">
-                    {s.items.filter((item) => item.group === group).map((item) => <StackTile key={`${item.label}-${item.short}`} item={item} />)}
-                  </ul>
-                </section>
-              ))}
+              {[...new Set(s.items.map((item) => item.group))].map((group) => {
+                const items = s.items.filter((item) => item.group === group);
+                if (!items.length) return null;
+                return (
+                  <section key={group} className="stack-item-group">
+                    <h4 className="stack-group-heading">{group}</h4>
+                    <ul className="stack-tile-grid">{items.map((item) => <StackTile key={`${item.label}-${item.short}`} item={item} />)}</ul>
+                  </section>
+                );
+              })}
             </div>
           </section>
         ))}
       </div>
-      {everydayTools && <section className="stack-everyday-tools"><h3 className="stack-everyday-heading"><MixedTitle text="Everyday tools" /></h3><ul className="stack-tile-grid">{everydayTools.items.map((item) => <StackTile key={item.label} item={item} />)}</ul></section>}
     </Chapter>
   );
 }
 
 export function HowIWork() {
   return (
-    <Chapter n="Four" title="How I Work">
-      <ol className="how-steps-grid">
-        {steps.map((s, i) => (
-          <HowStepCard key={s.title} step={s} number={i + 1} />
+    <Chapter n="Four" title="How I Work" numberless>
+      <p className="how-tagline">Skills start a project. Habits finish it.</p>
+      <div className="how-flower-intro">
+        <p className="how-flower-letters" aria-hidden="true">{"FLOWER".split("").map((letter, index) => <span key={`${letter}-${index}`}>{letter}</span>)}</p>
+        <p className="sr-only">FLOWER: Frame, Listen, Own, Welcome, Examine, Respect</p>
+      </div>
+      <div className="how-steps-grid">
+        {howIWorkSteps.map((step) => (
+          <HowStepCard key={step.letter} step={step} />
         ))}
-      </ol>
+      </div>
+      <aside className="how-ai-note">
+        <h3><MixedTitle text="How I use AI" /></h3>
+        <p>AI is my assistant, not my replacement. I never paste private data, credentials or client information into it, and I read, test and understand everything it produces before it goes into my work.</p>
+      </aside>
     </Chapter>
   );
 }
 
-function HowStepCard({ step, number }: { step: (typeof steps)[number]; number: number }) {
-  const glowRef = useGlowCard<HTMLLIElement>();
+function HowStepCard({ step }: { step: (typeof howIWorkSteps)[number] }) {
+  const glowRef = useGlowCard<HTMLElement>();
   return (
-    <li ref={glowRef} tabIndex={0} className="how-step-card glow-card">
-      <span className="how-step-number">{number}</span>
+    <article ref={glowRef} tabIndex={0} className="how-step-card glow-card">
+      <span className="how-step-letter" aria-hidden="true">{step.letter}</span>
       <div className="how-step-content">
-        <Star className="mx-auto text-rose" size={18} />
         <h3 className="mt-2 font-display text-2xl font-semibold"><MixedTitle text={step.title} /></h3>
         <p className="mt-2 text-sm">{step.text}</p>
       </div>
-    </li>
+    </article>
   );
 }
 
@@ -107,12 +124,12 @@ export function ProjectCard({ p, onOpen }: { p: Project; onOpen: () => void }) {
         </div>
         <div className="mt-4 flex items-baseline justify-between gap-3">
           <h3 className="font-display text-2xl font-semibold"><MixedTitle text={p.title} /></h3>
-          <span className="font-display italic text-mauve">{p.year}</span>
+          {p.year && <span className="font-display italic text-mauve">{p.year}</span>}
         </div>
-        <p className="text-sm">{p.role} · <span className="italic">{p.status}</span></p>
-        <ul className="mt-3 flex flex-wrap gap-2">
+        {[p.role, p.status].filter(Boolean).length > 0 && <p className="text-sm">{[p.role, p.status].filter(Boolean).join(" · ")}</p>}
+        {p.stack.length > 0 && <ul className="mt-3 flex flex-wrap gap-2">
           {p.stack.map((s, i) => <li key={i} className="rounded-full bg-blush px-3 py-0.5 text-xs">{s}</li>)}
-        </ul>
+        </ul>}
       </article>
     </div>
   );
@@ -143,7 +160,7 @@ export function Honors() {
 function AwardCard({ award, onOpen }: { award: Award; onOpen: () => void }) {
   const glowRef = useGlowCard<HTMLDivElement>();
   return (
-    <li className="min-w-0">
+    <li className={`min-w-0${award.event === "ITS Summit Fest" ? " award-card-ongoing" : ""}`}>
       <div ref={glowRef} role="button" tabIndex={0} aria-label={`View award: ${award.title}`} onClick={onOpen} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(); } }} className="award-card glow-card relative">
         <div aria-hidden="true" className="award-medal pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 -translate-y-6">
           <svg width="70" height="90" viewBox="0 0 70 90">
@@ -156,7 +173,8 @@ function AwardCard({ award, onOpen }: { award: Award; onOpen: () => void }) {
         <div className="award-content">
           <p className="mt-6 font-display text-sm italic text-mauve">{award.placement}</p>
           <h3 className="font-display text-2xl font-semibold"><MixedTitle text={award.title} /></h3>
-          <p className="mt-1 text-sm">{award.event} | {award.year}</p>
+          <p className="mt-1 text-sm">{[award.event, award.year].filter(Boolean).join(" | ")}</p>
+          {award.description && <p className="award-description">{award.description}</p>}
         </div>
       </div>
     </li>
@@ -197,7 +215,11 @@ function CertificateTicket({ cert, onView }: { cert: Cert; onView: () => void })
         </span>
         <span className="certificate-details">
           <span className="certificate-title-row"><Star className="certificate-star" size={15} /><span className="certificate-title"><MixedTitle text={cert.title} /></span></span>
-          <span className="certificate-meta"><span className="certificate-issuer">{cert.issuer}</span><span className="certificate-meta-divider" aria-hidden="true" /><span className="certificate-year">{cert.year}</span></span>
+          {(cert.issuer || cert.year) && <span className="certificate-meta">
+            {cert.issuer && <span className="certificate-issuer">{cert.issuer}</span>}
+            {cert.issuer && cert.year && <span className="certificate-meta-divider" aria-hidden="true" />}
+            {cert.year && <span className="certificate-year">{cert.year}</span>}
+          </span>}
         </span>
       </Button>
     </li>
@@ -208,7 +230,10 @@ function CertificateViewer({ cert, onClose }: { cert: Cert; onClose: () => void 
   return (
     <StoryModal open label={`Certificate: ${cert.title}`} onClose={onClose}>
       <h3 className="story-modal-heading">{cert.title}</h3>
-      <p className="story-modal-copy">{cert.issuer} | {cert.year}</p>
+      {[cert.issuer, cert.year].filter(Boolean).length > 0 && <p className="story-modal-copy">{[cert.issuer, cert.year].filter(Boolean).join(" | ")}</p>}
+      {cert.date && <p className="story-modal-copy">{cert.date}</p>}
+      {cert.credentialId && <p className="story-modal-copy">Credential ID: {cert.credentialId}</p>}
+      {cert.note && <p className="story-modal-note">{cert.note}</p>}
       <PortfolioFile file={cert.file} fileType={cert.fileType} title={cert.title} />
     </StoryModal>
   );
@@ -218,15 +243,17 @@ function AwardViewer({ award, onClose }: { award: Award; onClose: () => void }) 
   return (
     <StoryModal open label={`Award: ${award.title}`} onClose={onClose}>
       <h3 className="story-modal-heading">{award.title}</h3>
-      <p className="story-modal-copy">{award.placement} | {award.event} | {award.year}</p>
+      {[award.placement, award.event, award.year].filter(Boolean).length > 0 && <p className="story-modal-copy">{[award.placement, award.event, award.year].filter(Boolean).join(" | ")}</p>}
+      {award.description && <p className="story-modal-copy">{award.description}</p>}
       <PortfolioFile file={award.file} fileType={award.fileType} title={award.title} />
     </StoryModal>
   );
 }
 
-function PortfolioFile({ file, fileType, title }: { file?: string; fileType?: "image" | "pdf"; title: string }) {
+function PortfolioFile({ file, fileType, title }: { file?: string; fileType?: "image" | "pdf" | ""; title: string }) {
   const [zoomed, setZoomed] = useState(false);
-  if (!file) return <p className="story-modal-note">File coming soon</p>;
+  const [missing, setMissing] = useState(false);
+  if (!file || missing) return <p className="story-modal-note">Certificate coming soon</p>;
   if (fileType === "pdf") return (
     <>
       <iframe title={`${title} PDF`} src={file} className="story-modal-frame" />
@@ -235,7 +262,7 @@ function PortfolioFile({ file, fileType, title }: { file?: string; fileType?: "i
   );
   return (
     <button type="button" aria-label={zoomed ? "Zoom out" : "Zoom image"} onClick={() => setZoomed(!zoomed)} className="story-modal-image-button">
-      <img src={file} alt={title} className={`story-modal-file ${zoomed ? "is-zoomed" : ""}`} />
+      <img src={file} alt={title} onError={() => setMissing(true)} className={`story-modal-file ${zoomed ? "is-zoomed" : ""}`} />
     </button>
   );
 }
@@ -243,12 +270,13 @@ function PortfolioFile({ file, fileType, title }: { file?: string; fileType?: "i
 function ProjectViewer({ project, onClose }: { project: Project; onClose: () => void }) {
   const configuredLiveUrl = isConfiguredUrl(project.liveUrl) ? project.liveUrl : "";
   const canOpenCaseStudy = isConfiguredUrl(project.slug);
+  const metadata = [project.role, project.year].filter(Boolean).join(" | ");
   return (
     <StoryModal open label={`Project: ${project.title}`} onClose={onClose}>
       <h3 className="story-modal-heading">{project.title}</h3>
-      <p className="story-modal-copy">{project.role} | {project.year}</p>
+      {metadata && <p className="story-modal-copy">{metadata}</p>}
       <p className="mt-3">{project.summary}</p>
-      <ul className="story-modal-chips">{project.stack.map((item) => <li key={item}>{item}</li>)}</ul>
+      {project.stack.length > 0 && <ul className="story-modal-chips">{project.stack.map((item) => <li key={item}>{item}</li>)}</ul>}
       <ProjectPreview project={project} liveUrl={configuredLiveUrl} />
       <div className="story-modal-actions">
         {configuredLiveUrl && <a href={configuredLiveUrl} target="_blank" rel="noopener noreferrer" className="story-modal-link">Open website</a>}

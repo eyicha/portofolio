@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { profile } from "@/data/profile";
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
-import { Castle, Balustrade, RoseCluster, BlossomBranch, Petals, Wings, RibbonBow, Bunny, BookStack, Sparkle, Star, Cloud } from "./illustrations";
+import { Castle, Balustrade, RoseCluster, BlossomBranch, Petals, Wings, RibbonBow, Bunny, BookStack, Cloud } from "./illustrations";
+import { LandingSparkles } from "./LandingSparkles";
 
 export function StoryHero() {
   const [missing, setMissing] = useState(true);
   useEffect(() => { const photo = new Image(); photo.onerror = () => setMissing(true); photo.onload = () => { if (photo.naturalWidth > 0) setMissing(false); }; photo.src = profile.photo; return () => { photo.onerror = null; }; }, []);
   return <section id="top" className="story-hero">
     <div className="hero-sky" aria-hidden="true" />
+    <LandingSparkles scene="hero" />
     <Castle className="hero-castle" variant="wide" />
     <Cloud className="hero-cloud" variant="wispy" />
     <BlossomBranch className="hero-blossom blossom-left" />
@@ -35,7 +37,6 @@ export function StoryHero() {
     <Bunny className="hero-bunny" />
     <RoseCluster className="hero-roses roses-left" variant="foreground" />
     <RoseCluster className="hero-roses roses-right" flip />
-    <Sparkle className="hero-star star-one" animate /><Star className="hero-star star-two" animate />
     <div className="petal-layer" aria-hidden="true">{Array.from({ length: 7 }, (_, i) => <Petals key={i} variant={i % 2 ? "curl" : "round"} className={`falling-petal petal-${i}`} animate />)}</div>
     <div className="hero-actions"><Button asChild className="ribbon-tag"><a href="#work"><MixedTitle text="View Work" /></a></Button><Button asChild variant="outline" className="ribbon-tag ribbon-light"><a href={profile.cvUrl}><MixedTitle text="Download CV" /></a></Button></div>
   </section>;
