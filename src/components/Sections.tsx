@@ -19,12 +19,12 @@ export { StoryHero as Hero } from "./StoryHero";
 export function About() {
   return (
     <Chapter n="Two" title="About Me" id="story">
-      <div className="about-copy">
+      <div className="about-copy" data-scroll-blur>
         <div className="space-y-5 p-2 text-lg leading-relaxed md:p-6">
-          <p className="about-lead">I work where numbers meet people.</p>
-          <p><span className="float-left mr-2 font-script text-6xl leading-none text-deep-rose">{profile.bio.charAt(0)}</span><HighlightPhrase text={profile.bio.slice(1)} phrase="data analysis and backend engineering" /></p>
-          <p><HighlightPhrase text={profile.direction} phrase="Project Manager for four client projects" /></p>
-          <p className="text-base"><HighlightPhrase text={profile.otherExperience} phrase="Head of Department D" /> <a href="https://www.linkedin.com/in/erisa-salsabila" target="_blank" rel="noopener noreferrer" className="text-deep-rose underline underline-offset-4">See LinkedIn</a> for the full timeline.</p>
+          <p className="about-lead" data-scroll-text>I work where numbers meet people.</p>
+          <p data-scroll-text><span className="float-left mr-2 font-script text-6xl leading-none text-deep-rose">{profile.bio.charAt(0)}</span><HighlightPhrase text={profile.bio.slice(1)} phrase="data analysis and backend engineering" /></p>
+          <p data-scroll-text><HighlightPhrase text={profile.direction} phrase="Project Manager for four client projects" /></p>
+          <p className="text-base" data-scroll-text><HighlightPhrase text={profile.otherExperience} phrase="Head of Department D" /> <a href="https://www.linkedin.com/in/erisa-salsabila" target="_blank" rel="noopener noreferrer" className="text-deep-rose underline underline-offset-4">See LinkedIn</a> for the full timeline.</p>
         </div>
       </div>
     </Chapter>
@@ -52,7 +52,7 @@ export function Stack() {
           <section key={s.shelf} className="stack-shelf">
             <header className="stack-shelf-header">
               <h3 className="stack-area-heading"><MixedTitle text={s.shelf} /></h3>
-              <p className="stack-area-subtitle">{subtitles[s.shelf]}</p>
+              <p className="stack-area-subtitle" data-scroll-text>{subtitles[s.shelf]}</p>
             </header>
             <div className="stack-groups">
               {[...new Set(s.items.map((item) => item.group))].map((group) => {
@@ -76,7 +76,7 @@ export function Stack() {
 export function HowIWork() {
   return (
     <Chapter n="Four" title="How I Work" numberless>
-      <p className="how-tagline">Skills start a project. Habits finish it.</p>
+      <p className="how-tagline" data-scroll-text>Skills start a project. Habits finish it.</p>
       <div className="how-flower-intro">
         <p className="how-flower-letters" aria-hidden="true">{"FLOWER".split("").map((letter, index) => <span key={`${letter}-${index}`}>{letter}</span>)}</p>
         <p className="sr-only">FLOWER: Frame, Listen, Own, Welcome, Examine, Respect</p>
@@ -97,40 +97,44 @@ export function HowIWork() {
 function HowStepCard({ step }: { step: (typeof howIWorkSteps)[number] }) {
   const glowRef = useGlowCard<HTMLElement>();
   return (
-    <article ref={glowRef} tabIndex={0} className="how-step-card glow-card">
-      <span className="how-step-letter" aria-hidden="true">{step.letter}</span>
-      <div className="how-step-content">
-        <h3 className="mt-2 font-display text-2xl font-semibold"><MixedTitle text={step.title} /></h3>
-        <p className="mt-2 text-sm">{step.text}</p>
-      </div>
-    </article>
+    <div className="how-step-reveal" data-scroll-reveal="rise">
+      <article ref={glowRef} tabIndex={0} className="how-step-card glow-card">
+        <span className="how-step-letter" aria-hidden="true">{step.letter}</span>
+        <div className="how-step-content">
+          <h3 className="mt-2 font-display text-2xl font-semibold"><MixedTitle text={step.title} /></h3>
+          <p className="mt-2 text-sm" data-scroll-text>{step.text}</p>
+        </div>
+      </article>
+    </div>
   );
 }
 
 export function ProjectCard({ p, onOpen }: { p: Project; onOpen: () => void }) {
   const glowRef = useGlowCard<HTMLDivElement>();
   return (
-    <div ref={glowRef} role="button" tabIndex={0} aria-label={`View project: ${p.title}`} onClick={onOpen} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(); } }} className="group project-card glow-card block rounded-lg p-3">
-      <article className="project-plate relative p-4">
-        <OrnateFrame className="project-ornament" />
-        <div className="overflow-hidden rounded-xl border border-rose/40 bg-pearl">
-          <div className="flex items-center gap-1.5 bg-blush px-3 py-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-rose" />
-            <span className="h-2.5 w-2.5 rounded-full bg-blush" />
-            <span className="h-2.5 w-2.5 rounded-full bg-peri" />
-            <span className="ml-2 h-4 flex-1 rounded-full bg-pearl/80" />
+    <div className="project-card-reveal" data-scroll-reveal="rise">
+      <div ref={glowRef} role="button" tabIndex={0} aria-label={`View project: ${p.title}`} onClick={onOpen} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(); } }} className="group project-card glow-card block rounded-lg p-3">
+        <article className="project-plate relative p-4">
+          <OrnateFrame className="project-ornament" />
+          <div className="project-cover-frame overflow-hidden rounded-xl border border-rose/40 bg-pearl" data-scroll-image>
+            <div className="flex items-center gap-1.5 bg-blush px-3 py-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-rose" />
+              <span className="h-2.5 w-2.5 rounded-full bg-blush" />
+              <span className="h-2.5 w-2.5 rounded-full bg-peri" />
+              <span className="ml-2 h-4 flex-1 rounded-full bg-pearl/80" />
+            </div>
+            <SafeImage src={p.cover} alt={`${p.title} cover`} className="aspect-video w-full" />
           </div>
-          <SafeImage src={p.cover} alt={`${p.title} cover`} className="aspect-video w-full" />
-        </div>
-        <div className="mt-4 flex items-baseline justify-between gap-3">
-          <h3 className="font-display text-2xl font-semibold"><MixedTitle text={p.title} /></h3>
-          {p.year && <span className="font-display italic text-mauve">{p.year}</span>}
-        </div>
-        {[p.role, p.status].filter(Boolean).length > 0 && <p className="text-sm">{[p.role, p.status].filter(Boolean).join(" · ")}</p>}
-        {p.stack.length > 0 && <ul className="mt-3 flex flex-wrap gap-2">
-          {p.stack.map((s, i) => <li key={i} className="rounded-full bg-blush px-3 py-0.5 text-xs">{s}</li>)}
-        </ul>}
-      </article>
+          <div className="mt-4 flex items-baseline justify-between gap-3">
+            <h3 className="font-display text-2xl font-semibold"><MixedTitle text={p.title} /></h3>
+            {p.year && <span className="font-display italic text-mauve">{p.year}</span>}
+          </div>
+          {[p.role, p.status].filter(Boolean).length > 0 && <p className="text-sm">{[p.role, p.status].filter(Boolean).join(" · ")}</p>}
+          {p.stack.length > 0 && <ul className="mt-3 flex flex-wrap gap-2">
+            {p.stack.map((s, i) => <li key={i} className="rounded-full bg-blush px-3 py-0.5 text-xs">{s}</li>)}
+          </ul>}
+        </article>
+      </div>
     </div>
   );
 }
@@ -160,9 +164,9 @@ export function Honors() {
 function AwardCard({ award, onOpen }: { award: Award; onOpen: () => void }) {
   const glowRef = useGlowCard<HTMLDivElement>();
   return (
-    <li className={`min-w-0${award.event === "ITS Summit Fest" ? " award-card-ongoing" : ""}`}>
+    <li data-scroll-reveal="rise" className={`min-w-0${award.event === "ITS Summit Fest" ? " award-card-ongoing" : ""}`}>
       <div ref={glowRef} role="button" tabIndex={0} aria-label={`View award: ${award.title}`} onClick={onOpen} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(); } }} className="award-card glow-card relative">
-        <div aria-hidden="true" className="award-medal pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 -translate-y-6">
+        <div aria-hidden="true" data-scroll-image className="award-medal pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 -translate-y-6">
           <svg width="70" height="90" viewBox="0 0 70 90">
             <path d="M20 40l-8 46 13-8 8 12 4-50zM50 40l8 46-13-8-8 12-4-50z" fill="var(--blush)" stroke="var(--rose)" />
             <circle cx="35" cy="32" r="24" fill="var(--rose)" stroke="var(--pearl)" strokeWidth="3" />
@@ -174,7 +178,7 @@ function AwardCard({ award, onOpen }: { award: Award; onOpen: () => void }) {
           <p className="mt-6 font-display text-sm italic text-mauve">{award.placement}</p>
           <h3 className="font-display text-2xl font-semibold"><MixedTitle text={award.title} /></h3>
           <p className="mt-1 text-sm">{[award.event, award.year].filter(Boolean).join(" | ")}</p>
-          {award.description && <p className="award-description">{award.description}</p>}
+          {award.description && <p className="award-description" data-scroll-text>{award.description}</p>}
         </div>
       </div>
     </li>
@@ -203,7 +207,7 @@ function CertificateTicket({ cert, onView }: { cert: Cert; onView: () => void })
   return (
     <li className="certificate-item">
       <Button ref={glowRef} variant="ghost" aria-label={`View certificate: ${cert.title}`} onClick={onView} className="certificate-card glow-card">
-        <span className="certificate-image-frame">
+        <span className="certificate-image-frame" data-scroll-image>
           {missing ? (
             <span role="img" aria-label={`Missing certificate image: ${filename}`} className="certificate-placeholder">{filename}</span>
           ) : (
@@ -309,11 +313,13 @@ function isConfiguredUrl(value: string) {
 }
 
 function StackTile({ item }: { item: StackItem }) {
-  const glowRef = useGlowCard<HTMLLIElement>();
+  const glowRef = useGlowCard<HTMLDivElement>();
   return (
-    <li ref={glowRef} tabIndex={0} className="stack-tile glow-card">
-      <TechLogo name={item.label} monogram={item.short} />
-      <span className="stack-tile-label">{item.label}</span>
+    <li className="stack-tile-reveal" data-scroll-reveal="rise">
+      <div ref={glowRef} tabIndex={0} className="stack-tile glow-card">
+        <TechLogo name={item.label} monogram={item.short} />
+        <span className="stack-tile-label">{item.label}</span>
+      </div>
     </li>
   );
 }

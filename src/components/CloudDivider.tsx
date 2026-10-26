@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Cloud, Swan, Sparkle } from "./illustrations";
-import { useMotionSetting, useScrollProgress } from "@/hooks/useMotion";
+import { Petals, Swan, Sparkle } from "./illustrations";
 
 export function CloudDivider({ swan = true, flip, id = "a" }: { swan?: boolean; flip?: boolean; id?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
   const divider = useRef<HTMLDivElement>(null);
   const [dividerIndex, setDividerIndex] = useState(0);
-  const { mode } = useMotionSetting();
   useEffect(() => {
     const element = divider.current;
     if (!element?.parentElement) return;
@@ -14,14 +11,13 @@ export function CloudDivider({ swan = true, flip, id = "a" }: { swan?: boolean; 
     setDividerIndex(dividers.indexOf(element));
   }, []);
   const facingRight = flip ?? dividerIndex % 2 === 1;
-  useScrollProgress(ref, swan && mode === "full", { sourceRef: divider, glide: true, direction: facingRight ? 1 : -1 });
 
   return (
     <div ref={divider} aria-hidden="true" className="pointer-events-none cloud-divider relative h-32 md:h-32">
-      <Cloud className="absolute bottom-0 h-16 w-[140%] -translate-x-[10%] opacity-70" />
-      <Cloud className="absolute bottom-0 h-10 w-full" />
+      <div className="divider-pink-wash" />
+      {[0, 1, 2, 3].map((index) => <Petals key={index} className={`divider-falling-petal divider-falling-petal-${index}`} variant={index % 2 ? "curl" : "round"} />)}
       {swan && (
-        <div ref={ref} className="absolute divider-swan swan-scroll-transform will-change-transform">
+        <div className="absolute divider-swan">
           <span className="divider-swan-wake" aria-hidden="true"><i /><i /><i /></span>
           <Sparkle className="swan-trail" animate />
           <Swan flip={facingRight} variant={dividerIndex % 2 === 1 || id === "b" ? "resting" : undefined} className="w-full" />

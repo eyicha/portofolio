@@ -1,13 +1,14 @@
 import { createContext, useContext, useEffect, useState, type ReactNode, type RefObject } from "react";
 
 type MotionMode = "full" | "reduced";
-type MotionContextValue = { mode: MotionMode; toggle: () => void };
+type MotionContextValue = { mode: MotionMode; ready: boolean; toggle: () => void };
 type ScrollOptions = { maxDrift?: number; parallaxSpeed?: number; trackPage?: boolean; sourceRef?: RefObject<HTMLElement | null>; glide?: boolean; direction?: 1 | -1; wake?: boolean };
 
-const MotionContext = createContext<MotionContextValue>({ mode: "full", toggle: () => undefined });
+const MotionContext = createContext<MotionContextValue>({ mode: "full", ready: false, toggle: () => undefined });
 
 export function MotionProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<MotionMode>("full");
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     try {
@@ -15,6 +16,8 @@ export function MotionProvider({ children }: { children: ReactNode }) {
       if (saved === "full" || saved === "reduced") setMode(saved);
     } catch {
       setMode("full");
+    } finally {
+      setReady(true);
     }
   }, []);
 
@@ -33,7 +36,7 @@ export function MotionProvider({ children }: { children: ReactNode }) {
   }, [mode]);
 
   return (
-    <MotionContext.Provider value={{ mode, toggle }}>
+    <MotionContext.Provider value={{ mode, ready, toggle }}>
       {children}
       <MotionToggle />
     </MotionContext.Provider>

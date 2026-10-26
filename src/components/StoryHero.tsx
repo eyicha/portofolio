@@ -12,9 +12,9 @@ export function StoryHero() {
     <div className="hero-sky" aria-hidden="true" />
     <LandingSparkles scene="hero" />
     <Castle className="hero-castle" variant="wide" />
-    <Cloud className="hero-cloud" variant="wispy" />
-    <BlossomBranch className="hero-blossom blossom-left" />
-    <BlossomBranch className="hero-blossom blossom-right" flip />
+    <div className="hero-parallax-layer hero-parallax-cloud" data-scroll-parallax="6"><Cloud className="hero-cloud" variant="wispy" /></div>
+    <div className="hero-parallax-layer hero-parallax-blossom blossom-left" data-scroll-parallax="4"><BlossomBranch className="hero-blossom" /></div>
+    <div className="hero-parallax-layer hero-parallax-blossom blossom-right" data-scroll-parallax="-4"><BlossomBranch className="hero-blossom" flip /></div>
     <div className="hero-heading">
       <span className="chapter-bookmark hero-chapter-bookmark" aria-hidden="true" />
       <p className="chapter-number-label hero-chapter-label"><span className="chapter-numeral font-script">1</span></p>

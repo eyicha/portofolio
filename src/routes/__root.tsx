@@ -16,6 +16,7 @@ import { Nav, Footer, MusicToggle } from "@/components/Chrome";
 import { FairyCursor } from "@/components/FairyCursor";
 import { Dust } from "@/components/CloudDivider";
 import { BackgroundSwans } from "@/components/BackgroundSwans";
+import { ScrollEffects } from "@/components/ScrollEffects";
 import { MotionProvider } from "@/hooks/useMotion";
 
 function NotFoundComponent() {
@@ -132,13 +133,15 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <MotionProvider>
-        <Dust />
-        <BackgroundSwans />
-        <Nav />
-        <Outlet />
-        <Footer />
-        <MusicToggle />
-        <FairyCursor />
+        <ScrollEffects>
+          <Dust />
+          <BackgroundSwans />
+          <Nav />
+          <Outlet />
+          <Footer />
+          <MusicToggle />
+          <FairyCursor />
+        </ScrollEffects>
       </MotionProvider>
     </QueryClientProvider>
   );

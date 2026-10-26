@@ -63,12 +63,13 @@ export function ContactLetter() {
     <Cherub className="contact-cherub" />
     <RoseCluster className="contact-rose" flip />
     <div ref={stage} className={`letter-stage letter-${phase}`}>
+      <div data-scroll-contact>
       <form ref={form} onInput={updateValidity} onChange={updateValidity} onSubmit={e => { e.preventDefault(); void submit(); }} className="love-letter" aria-hidden={phase !== "writing"} inert={phase !== "writing"}>
         <LaceEdge className="letter-lace" />
         <p className="dear-erisa font-script">Dear Erisa,</p>
         <label><MixedTitle text="Your name" /><input name="name" required maxLength={100} autoComplete="name" /></label>
         <label><MixedTitle text="Your email" /><input name="email" type="email" required maxLength={255} autoComplete="email" /></label>
-        <label><MixedTitle text="Your message" /><textarea name="message" required minLength={10} maxLength={2000} rows={4} /></label>
+        <label><MixedTitle text="Your message" /><textarea data-lenis-prevent name="message" required minLength={10} maxLength={2000} rows={4} /></label>
         <div className="letter-honeypot" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
         <div className={`letter-seal-area ${valid ? "seal-ready" : "seal-incomplete"}`}>
           <p className="seal-hint">{sending ? "Sending your letter" : valid ? "Tap the seal to send your letter" : "Fill in the letter first"}</p>
@@ -79,6 +80,7 @@ export function ContactLetter() {
         <p className="letter-note">AI suggestions are only drafts.</p>
         <p role="alert" className="letter-error">{error}</p>
       </form>
+      </div>
       {phase === "flying" && <div className="letter-flight" aria-label="Your letter folds and flies away">
         <div className="flight-envelope"><Envelope /><WaxSeal className="flight-seal" /><LaceEdge className="flight-lace" /></div>
         <PaperPlane className="flight-plane" />

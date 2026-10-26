@@ -93,6 +93,10 @@ export function useReveal<T extends HTMLElement>() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (el.getBoundingClientRect().bottom <= 0) {
+      el.classList.add("is-in");
+      return;
+    }
     const io = new IntersectionObserver(
       ([e]) => {
         if (e?.isIntersecting) {
@@ -115,7 +119,7 @@ export function Chapter({ n, title, id, children, numberless = false }: { n: str
     <span className="chapter-sheet-front" aria-hidden="true" />
     <span className="chapter-inner-border" aria-hidden="true" />
     <p className="chapter-running-line" aria-hidden="true">{title}</p>
-    <header className="chapter-header"><span className="chapter-bookmark" aria-hidden="true"/>{!numberless && <p className="chapter-number-label"><span className="chapter-numeral font-script">{number}</span></p>}<h2><MixedTitle text={title} write /></h2><Sparkle className="chapter-sparkle" /></header>
+    <header className="chapter-header" data-scroll-blur><span className="chapter-bookmark" aria-hidden="true"/>{!numberless && <p className="chapter-number-label"><span className="chapter-numeral font-script">{number}</span></p>}<h2><MixedTitle text={title} write /></h2><Sparkle className="chapter-sparkle" /></header>
     <div className="chapter-content">{children}</div>{!numberless && <span className="page-number" aria-hidden="true">{number}</span>}<span className="page-curl" aria-hidden="true"/>
   </section>;
 }
