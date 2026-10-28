@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { profile } from "@/data/profile";
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
-import { Castle, Balustrade, RoseCluster, BlossomBranch, Petals, Wings, RibbonBow, Bunny, BookStack, Cloud } from "./illustrations";
+import { Castle, Balustrade, RoseCluster, BlossomBranch, Petals, RibbonBow, Bunny, BookStack, Cloud } from "./illustrations";
 import { LandingSparkles } from "./LandingSparkles";
 
 export function StoryHero() {
@@ -22,7 +22,6 @@ export function StoryHero() {
       <p className="hero-intro">I turn data into stories and build the systems behind them</p>
     </div>
     <div className="hero-portrait animate-float">
-      <Wings className="hero-wings" animate />
       {!missing && <img src={profile.photo} alt="Portrait of Erisa Salsabila" onError={() => setMissing(true)} className="portrait-cutout" />}
       {missing && <div className="portrait-placeholder" role="img" aria-label="Pink silhouette placeholder for Erisa's portrait"><svg viewBox="0 0 260 400" aria-hidden="true"><path d="M81 115C50 39 91 4 130 5C174 3 210 47 179 116L186 150Q226 178 234 233L249 399H11L26 233Q34 178 74 150Z" fill="var(--portrait-pink)"/><ellipse cx="130" cy="80" rx="44" ry="58" fill="var(--rose)"/><path d="M90 130Q130 151 170 130L166 168Q130 185 94 168Z" fill="var(--rose)"/></svg><span>TODO portrait</span></div>}
     </div>

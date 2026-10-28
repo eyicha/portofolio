@@ -12,6 +12,7 @@ export type Project = {
   stack: string[];
   liveUrl: string;
   githubUrl: string;
+  demoVideoUrl?: string;
   cover: string;
   screenshots: string[];
 };
@@ -36,7 +37,8 @@ export const projects: Project[] = [
     stack: ["Laravel", "DOKU Payment Gateway", "Backend Development", "Project Management"],
     liveUrl: "",
     githubUrl: "https://github.com/thisafif/swarna-mandapa",
-    cover: "/images/projects/villa-swarna-mandapa/cover.png",
+    demoVideoUrl: "https://res.cloudinary.com/wibs4rxk/video/upload/v1793181198/1028_1.mp4",
+    cover: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793181348/Screenshot_2026-10-28_165510.png",
     screenshots: [],
   },
   // TODO: add liveUrl, problem, solution, features, screenshots
@@ -55,9 +57,10 @@ export const projects: Project[] = [
     solution: "",
     features: [],
     stack: ["Python", "Back-End Web Development"],
-    liveUrl: "",
+    liveUrl: "https://adil-cyan.vercel.app/",
     githubUrl: "https://github.com/dounfi/adil",
-    cover: "/images/projects/adil/cover.png",
+    demoVideoUrl: "https://res.cloudinary.com/wibs4rxk/video/upload/v1793181748/1028.mp4",
+    cover: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793181752/Screenshot_2026-10-28_170158.png",
     screenshots: [],
   },
   // TODO: add liveUrl, problem, solution, features, screenshots
@@ -74,7 +77,8 @@ export const projects: Project[] = [
     stack: ["Midtrans"],
     liveUrl: "",
     githubUrl: "https://github.com/eyicha/ipb-rental",
-    cover: "/images/projects/ipb-rental/cover.png",
+    demoVideoUrl: "https://res.cloudinary.com/wibs4rxk/video/upload/v1793184294/1028_2.mp4",
+    cover: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793183136/Screenshot_2026-10-28_172443.png",
     screenshots: [],
   },
   // TODO: add liveUrl, problem, solution, features, screenshots

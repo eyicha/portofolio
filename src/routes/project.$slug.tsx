@@ -70,6 +70,16 @@ function ProjectPage() {
           </ul>
         </Block>
       ) : null}
+      {p.demoVideoUrl && (
+        <Block title="Demo">
+          <div className="project-preview">
+            <video controls playsInline preload="metadata" aria-label={`${p.title} demo video`}>
+              <source src={p.demoVideoUrl} type="video/mp4" />
+              Your browser does not support video playback.
+            </video>
+          </div>
+        </Block>
+      )}
       {p.problem && <Block title="Problem"><p>{p.problem}</p></Block>}
       {p.solution && <Block title="Solution"><p>{p.solution}</p></Block>}
       {features.length > 0 && (

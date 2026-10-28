@@ -361,8 +361,17 @@ function ProjectPreview({ project, liveUrl }: { project: Project; liveUrl: strin
   }, [liveUrl]);
   return (
     <div className="project-preview">
-      {!fallback && <iframe title={`${project.title} live preview`} src={liveUrl} loading="lazy" sandbox="allow-scripts allow-forms allow-popups" onLoad={() => { if (timer.current) clearTimeout(timer.current); setFallback(false); }} />}
-      {fallback && (imageMissing ? <span className="project-preview-placeholder">{project.cover.split("/").pop() || project.cover}</span> : <img src={project.cover} alt={`${project.title} preview`} loading="lazy" onError={() => setImageMissing(true)} />)}
+      {project.demoVideoUrl ? (
+        <video controls playsInline preload="metadata" aria-label={`${project.title} demo video`}>
+          <source src={project.demoVideoUrl} type="video/mp4" />
+          Your browser does not support video playback.
+        </video>
+      ) : (
+        <>
+          {!fallback && <iframe title={`${project.title} live preview`} src={liveUrl} loading="lazy" sandbox="allow-scripts allow-forms allow-popups" onLoad={() => { if (timer.current) clearTimeout(timer.current); setFallback(false); }} />}
+          {fallback && (imageMissing ? <span className="project-preview-placeholder">{project.cover.split("/").pop() || project.cover}</span> : <img src={project.cover} alt={`${project.title} preview`} loading="lazy" onError={() => setImageMissing(true)} />)}
+        </>
+      )}
     </div>
   );
 }
