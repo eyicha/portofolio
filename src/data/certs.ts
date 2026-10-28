@@ -39,13 +39,4 @@ export const certs: Cert[] = [
     file: "/images/certs/4.png",
     fileType: "image",
   },
-  {
-    title: "UI/UX Design",
-    issuer: "Skilvul",
-    year: "2025",
-    date: "January 2025",
-    image: "/images/certs/5.png",
-    file: "/images/certs/5.png",
-    fileType: "image",
-  },
 ];

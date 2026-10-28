@@ -5,6 +5,7 @@ export type Project = {
   role: string;
   status: string;
   summary: string;
+  results?: string[];
   problem: string;
   solution: string;
   features: string[];
@@ -16,72 +17,121 @@ export type Project = {
 };
 
 export const projects: Project[] = [
-  // TODO: add liveUrl, githubUrl, problem, solution, features
+  // TODO: add liveUrl, problem, solution, features, screenshots
   {
     slug: "villa-swarna-mandapa",
     title: "Villa Swarna Mandapa",
     year: "2026",
-    role: "Project coordination",
+    role: "Backend and project coordination",
     status: "Completed",
-    summary: "Coordinated project planning and task distribution to support the development process.",
+    summary: "A villa booking website with a Laravel backend integrated with the DOKU payment gateway.",
+    results: [
+      "Built a Laravel backend that integrates cleanly with the DOKU payment gateway.",
+      "In the security checks carried out so far, no way to break in was found.",
+      "Coordinated project planning and task distribution across the team.",
+    ],
     problem: "",
     solution: "",
     features: [],
-    stack: ["Project Management", "Web Development"],
+    stack: ["Laravel", "DOKU Payment Gateway", "Backend Development", "Project Management"],
     liveUrl: "",
-    githubUrl: "",
+    githubUrl: "https://github.com/thisafif/swarna-mandapa",
     cover: "/images/projects/villa-swarna-mandapa/cover.png",
-    screenshots: ["/images/projects/villa-swarna-mandapa/1.png", "/images/projects/villa-swarna-mandapa/2.png", "/images/projects/villa-swarna-mandapa/3.png"],
+    screenshots: [],
   },
-  // TODO: add liveUrl, githubUrl, problem, solution, features
+  // TODO: add liveUrl, problem, solution, features, screenshots
   {
     slug: "adil",
     title: "ADIL: Competition Work Similarity Detection",
     year: "",
     role: "Backend contributor",
     status: "",
-    summary: "Contributed to backend development for a web-based platform for competition work similarity detection.",
+    summary: "A web platform that checks competition entries, such as posters, for similarity.",
+    results: [
+      "Found that the early similarity check was inaccurate: uploading the same poster twice reported only a small similarity.",
+      "Rewrote the checking logic in the backend until identical posters scored 100 percent.",
+    ],
     problem: "",
     solution: "",
     features: [],
-    stack: ["Back-End Web Development", "Web Development"],
+    stack: ["Python", "Back-End Web Development"],
     liveUrl: "",
-    githubUrl: "",
+    githubUrl: "https://github.com/dounfi/adil",
     cover: "/images/projects/adil/cover.png",
-    screenshots: ["/images/projects/adil/1.png", "/images/projects/adil/2.png", "/images/projects/adil/3.png"],
+    screenshots: [],
   },
-  // TODO: add liveUrl, githubUrl, problem, solution, features
+  // TODO: add liveUrl, problem, solution, features, screenshots
+  {
+    slug: "ipb-rental",
+    title: "IPB Rental",
+    year: "",
+    role: "Backend contributor",
+    status: "",
+    summary: "An item rental platform with online payment through Midtrans.",
+    problem: "",
+    solution: "",
+    features: [],
+    stack: ["Midtrans"],
+    liveUrl: "",
+    githubUrl: "https://github.com/eyicha/ipb-rental",
+    cover: "/images/projects/ipb-rental/cover.png",
+    screenshots: [],
+  },
+  // TODO: add liveUrl, problem, solution, features, screenshots
   {
     slug: "kilau-build",
     title: "KILAU Build",
     year: "",
-    role: "Backend contributor",
+    role: "Supporting backend engineer",
     status: "",
-    summary: "Contributed to the development of the KILAU project by supporting selected backend functionality.",
+    summary: "Supported the backend of the KILAU project alongside the lead backend engineer.",
+    results: ["Contributed selected backend functionality, working under the lead backend engineer."],
     problem: "",
     solution: "",
     features: [],
-    stack: ["Testing", "User Interface Design"],
+    stack: ["Laravel", "Testing", "User Interface Design"],
     liveUrl: "",
-    githubUrl: "",
+    githubUrl: "https://github.com/thisafif/projectkilaubuild",
     cover: "/images/projects/kilau-build/cover.png",
-    screenshots: ["/images/projects/kilau-build/1.png", "/images/projects/kilau-build/2.png", "/images/projects/kilau-build/3.png"],
+    screenshots: [],
   },
-  // TODO: add liveUrl, githubUrl, problem, solution, features
+  // TODO: add liveUrl, problem, solution, features, screenshots
   {
     slug: "sentra",
     title: "SENTRA: Regional Data Analysis and Geospatial Mapping",
     year: "",
-    role: "Project coordination",
-    status: "",
-    summary: "Managed project coordination and task distribution to support the team's project objectives.",
+    role: "Data analyst, GIS analyst and project coordination",
+    status: "In progress",
+    summary: "A regional data analysis and geospatial mapping project built so that later field research can rely on it.",
+    results: [
+      "Built an analysis and mapping model that is accurate and ready for further field research, for example by community service (KKN) teams.",
+      "Carried out the data analysis and GIS work in QGIS, and coordinated tasks across the team.",
+    ],
     problem: "",
     solution: "",
     features: [],
-    stack: ["Data Analysis", "Geographic Information Systems (GIS)"],
+    stack: ["QGIS", "Data Analysis", "Geographic Information Systems (GIS)"],
+    liveUrl: "",
+    githubUrl: "https://github.com/NadaaaaH/sentra",
+    cover: "/images/projects/sentra/cover.png",
+    screenshots: [],
+  },
+  // TODO: add liveUrl, problem, solution, features, screenshots
+  {
+    slug: "fastvision",
+    title: "FastVision",
+    year: "",
+    role: "Data and machine learning",
+    status: "In progress",
+    summary: "A project in progress to detect Bell's palsy from facial images.",
+    results: ["I work on the machine learning and data for facial Bell's palsy detection."],
+    problem: "",
+    solution: "",
+    features: [],
+    stack: [],
     liveUrl: "",
     githubUrl: "",
-    cover: "/images/projects/sentra/cover.png",
-    screenshots: ["/images/projects/sentra/1.png", "/images/projects/sentra/2.png", "/images/projects/sentra/3.png"],
+    cover: "/images/projects/fastvision/cover.png",
+    screenshots: [],
   },
 ];

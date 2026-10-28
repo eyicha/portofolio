@@ -2,16 +2,15 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { profile } from "@/data/profile";
 import { howIWorkSteps } from "@/data/how-i-work";
-import { stack, type StackItem } from "@/data/stack";
+import { stack } from "@/data/stack";
 import { projects, type Project } from "@/data/projects";
 import { awards, type Award } from "@/data/awards";
+import { publications, type Publication } from "@/data/publications";
 import { certs, type Cert } from "@/data/certs";
 import { Chapter, SafeImage, Star, WaxSeal } from "./ornaments";
 import { StoryModal } from "./Chrome";
 import { MixedTitle } from "./MixedTitle";
 import { Button } from "./ui/button";
-import { OrnateFrame } from "./illustrations";
-import { TechLogo } from "./TechLogo";
 import { useGlowCard } from "@/hooks/useGlowCard";
 
 export { StoryHero as Hero } from "./StoryHero";
@@ -39,6 +38,7 @@ function HighlightPhrase({ text, phrase }: { text: string; phrase: string }) {
 }
 
 export function Stack() {
+  const [selectedShelf, setSelectedShelf] = useState(stack[0]?.shelf ?? "");
   const subtitles: Record<string, string> = {
     Frontend: "What I build screens with",
     Backend: "What powers my services",
@@ -48,20 +48,48 @@ export function Stack() {
   return (
     <Chapter n="Three" title="Stack and Tools" id="stack">
       <div className="stack-area-grid">
-        {stack.map((s) => (
-          <section key={s.shelf} className="stack-shelf">
+        <div className="stack-tabs" role="tablist" aria-label="Technology areas">
+          {stack.map((area, index) => {
+            const tabId = `stack-tab-${index}`;
+            return (
+              <button
+                key={area.shelf}
+                id={tabId}
+                type="button"
+                role="tab"
+                aria-selected={selectedShelf === area.shelf}
+                aria-controls="stack-area-panel"
+                tabIndex={selectedShelf === area.shelf ? 0 : -1}
+                className="stack-tab"
+                onClick={() => setSelectedShelf(area.shelf)}
+                onKeyDown={(event) => {
+                  if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+                  event.preventDefault();
+                  const direction = event.key === "ArrowRight" ? 1 : -1;
+                  const next = (index + direction + stack.length) % stack.length;
+                  setSelectedShelf(stack[next].shelf);
+                  document.getElementById(`stack-tab-${next}`)?.focus();
+                }}
+              >
+                {area.shelf}
+              </button>
+            );
+          })}
+        </div>
+        {stack.filter((area) => area.shelf === selectedShelf).map((area) => (
+          <section key={area.shelf} id="stack-area-panel" role="tabpanel" aria-labelledby={`stack-tab-${stack.indexOf(area)}`} className="stack-area-panel">
             <header className="stack-shelf-header">
-              <h3 className="stack-area-heading"><MixedTitle text={s.shelf} /></h3>
-              <p className="stack-area-subtitle" data-scroll-text>{subtitles[s.shelf]}</p>
+              <h3 className="stack-area-heading"><MixedTitle text={area.shelf} /></h3>
+              <p className="stack-area-subtitle">{subtitles[area.shelf]}</p>
             </header>
             <div className="stack-groups">
-              {[...new Set(s.items.map((item) => item.group))].map((group) => {
-                const items = s.items.filter((item) => item.group === group);
+              {[...new Set(area.items.map((item) => item.group))].map((group) => {
+                const items = area.items.filter((item) => item.group === group);
                 if (!items.length) return null;
                 return (
                   <section key={group} className="stack-item-group">
                     <h4 className="stack-group-heading">{group}</h4>
-                    <ul className="stack-tile-grid">{items.map((item) => <StackTile key={`${item.label}-${item.short}`} item={item} />)}</ul>
+                    <ul className="stack-skill-list">{items.map((item) => <li key={`${item.label}-${item.short}`} className="stack-skill-chip">{item.label}</li>)}</ul>
                   </section>
                 );
               })}
@@ -115,21 +143,21 @@ export function ProjectCard({ p, onOpen }: { p: Project; onOpen: () => void }) {
     <div className="project-card-reveal" data-scroll-reveal="rise">
       <div ref={glowRef} role="button" tabIndex={0} aria-label={`View project: ${p.title}`} onClick={onOpen} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(); } }} className="group project-card glow-card block rounded-lg p-3">
         <article className="project-plate relative p-4">
-          <OrnateFrame className="project-ornament" />
           <div className="project-cover-frame overflow-hidden rounded-xl border border-rose/40 bg-pearl" data-scroll-image>
             <div className="flex items-center gap-1.5 bg-blush px-3 py-2">
               <span className="h-2.5 w-2.5 rounded-full bg-rose" />
               <span className="h-2.5 w-2.5 rounded-full bg-blush" />
-              <span className="h-2.5 w-2.5 rounded-full bg-peri" />
+              <span className="h-2.5 w-2.5 rounded-full bg-foil" />
               <span className="ml-2 h-4 flex-1 rounded-full bg-pearl/80" />
             </div>
             <SafeImage src={p.cover} alt={`${p.title} cover`} className="aspect-video w-full" />
           </div>
           <div className="mt-4 flex items-baseline justify-between gap-3">
-            <h3 className="font-display text-2xl font-semibold"><MixedTitle text={p.title} /></h3>
+            <h3 className="project-title font-display font-semibold"><MixedTitle text={p.title} /></h3>
             {p.year && <span className="font-display italic text-mauve">{p.year}</span>}
           </div>
-          {[p.role, p.status].filter(Boolean).length > 0 && <p className="text-sm">{[p.role, p.status].filter(Boolean).join(" · ")}</p>}
+          {p.role && <p className="text-sm">{p.role}</p>}
+          {p.status && <span className="mt-2 inline-flex rounded-full border border-foil bg-cream px-3 py-1 text-xs text-deep-rose">{p.status}</span>}
           {p.stack.length > 0 && <ul className="mt-3 flex flex-wrap gap-2">
             {p.stack.map((s, i) => <li key={i} className="rounded-full bg-blush px-3 py-0.5 text-xs">{s}</li>)}
           </ul>}
@@ -143,7 +171,7 @@ export function Portfolio() {
   const [selected, setSelected] = useState<Project | null>(null);
   return (
     <Chapter n="Five" title="Portfolio" id="work">
-      <div className="grid gap-8 md:grid-cols-2">{projects.map((p) => <ProjectCard key={p.slug} p={p} onOpen={() => setSelected(p)} />)}</div>
+      <div className="grid grid-cols-1 items-stretch gap-8 sm:grid-cols-2 lg:grid-cols-3">{projects.map((p) => <ProjectCard key={p.slug} p={p} onOpen={() => setSelected(p)} />)}</div>
       {selected && <ProjectViewer project={selected} onClose={() => setSelected(null)} />}
     </Chapter>
   );
@@ -156,6 +184,13 @@ export function Honors() {
       <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {awards.map((award, index) => <AwardCard key={index} award={award} onOpen={() => setSelected(award)} />)}
       </ul>
+      <section className="publications-section" aria-labelledby="publications-heading">
+        <h3 id="publications-heading" className="font-display text-2xl font-semibold text-deep-rose"><MixedTitle text="Publications" /></h3>
+        <p className="publications-subtitle">Research and writing</p>
+        <ul className="publication-grid">
+          {publications.map((publication) => <PublicationCard key={publication.title} publication={publication} />)}
+        </ul>
+      </section>
       {selected && <AwardViewer award={selected} onClose={() => setSelected(null)} />}
     </Chapter>
   );
@@ -179,6 +214,7 @@ function AwardCard({ award, onOpen }: { award: Award; onOpen: () => void }) {
           <h3 className="font-display text-2xl font-semibold"><MixedTitle text={award.title} /></h3>
           <p className="mt-1 text-sm">{[award.event, award.year].filter(Boolean).join(" | ")}</p>
           {award.description && <p className="award-description" data-scroll-text>{award.description}</p>}
+          {award.contribution && <p className="award-contribution">{award.contribution}</p>}
         </div>
       </div>
     </li>
@@ -249,8 +285,24 @@ function AwardViewer({ award, onClose }: { award: Award; onClose: () => void }) 
       <h3 className="story-modal-heading">{award.title}</h3>
       {[award.placement, award.event, award.year].filter(Boolean).length > 0 && <p className="story-modal-copy">{[award.placement, award.event, award.year].filter(Boolean).join(" | ")}</p>}
       {award.description && <p className="story-modal-copy">{award.description}</p>}
+      {award.contribution && <p className="story-modal-copy award-modal-contribution">{award.contribution}</p>}
       <PortfolioFile file={award.file} fileType={award.fileType} title={award.title} />
     </StoryModal>
+  );
+}
+
+function PublicationCard({ publication }: { publication: Publication }) {
+  const glowRef = useGlowCard<HTMLDivElement>();
+  return (
+    <li className="min-w-0" data-scroll-reveal="rise">
+      <article ref={glowRef} className="publication-card glow-card">
+        <h4 className="font-display text-lg font-semibold text-deep-rose">{publication.title}</h4>
+        {[publication.venue, publication.date].filter(Boolean).length > 0 && <p className="publication-meta">{[publication.venue, publication.date].filter(Boolean).join(" | ")}</p>}
+        {publication.role && <p className="publication-role">{publication.role}</p>}
+        {publication.description && <p className="publication-description">{publication.description}</p>}
+        {publication.url && <a href={publication.url} target="_blank" rel="noopener noreferrer" className="publication-read">Read</a>}
+      </article>
+    </li>
   );
 }
 
@@ -273,17 +325,24 @@ function PortfolioFile({ file, fileType, title }: { file?: string; fileType?: "i
 
 function ProjectViewer({ project, onClose }: { project: Project; onClose: () => void }) {
   const configuredLiveUrl = isConfiguredUrl(project.liveUrl) ? project.liveUrl : "";
+  const configuredGithubUrl = isConfiguredUrl(project.githubUrl) ? project.githubUrl : "";
   const canOpenCaseStudy = isConfiguredUrl(project.slug);
   const metadata = [project.role, project.year].filter(Boolean).join(" | ");
   return (
     <StoryModal open label={`Project: ${project.title}`} onClose={onClose}>
       <h3 className="story-modal-heading">{project.title}</h3>
       {metadata && <p className="story-modal-copy">{metadata}</p>}
-      <p className="mt-3">{project.summary}</p>
+      {project.summary && <p className="mt-3">{project.summary}</p>}
+      {project.results?.length ? (
+        <ul className="mt-3 list-none space-y-2">
+          {project.results.slice(0, 2).map((result) => <li key={result} className="flex items-start gap-2"><Star size={10} className="mt-1 shrink-0 text-[var(--foil)]" /><span>{result}</span></li>)}
+        </ul>
+      ) : null}
       {project.stack.length > 0 && <ul className="story-modal-chips">{project.stack.map((item) => <li key={item}>{item}</li>)}</ul>}
       <ProjectPreview project={project} liveUrl={configuredLiveUrl} />
       <div className="story-modal-actions">
         {configuredLiveUrl && <a href={configuredLiveUrl} target="_blank" rel="noopener noreferrer" className="story-modal-link">Open website</a>}
+        {configuredGithubUrl && <a href={configuredGithubUrl} target="_blank" rel="noopener noreferrer" className="story-modal-link">GitHub</a>}
         {canOpenCaseStudy && <Link to="/project/$slug" params={{ slug: project.slug }} className="story-modal-link">View case study</Link>}
       </div>
     </StoryModal>
@@ -310,18 +369,6 @@ function ProjectPreview({ project, liveUrl }: { project: Project; liveUrl: strin
 
 function isConfiguredUrl(value: string) {
   return Boolean(value.trim() && !value.toLowerCase().includes("todo"));
-}
-
-function StackTile({ item }: { item: StackItem }) {
-  const glowRef = useGlowCard<HTMLDivElement>();
-  return (
-    <li className="stack-tile-reveal" data-scroll-reveal="rise">
-      <div ref={glowRef} tabIndex={0} className="stack-tile glow-card">
-        <TechLogo name={item.label} monogram={item.short} />
-        <span className="stack-tile-label">{item.label}</span>
-      </div>
-    </li>
-  );
 }
 
 export { TwilightClosing as TheEnd } from "./TwilightClosing";

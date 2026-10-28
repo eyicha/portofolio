@@ -1,4 +1,4 @@
-export type Award = { title: string; event: string; year: string; placement: string; description?: string; file: string; fileType: "image" | "pdf" | "" };
+export type Award = { title: string; event: string; year: string; placement: string; description?: string; contribution?: string; file: string; fileType: "image" | "pdf" | "" };
 
 export const awards: Award[] = [
   {
@@ -6,7 +6,8 @@ export const awards: Award[] = [
     event: "PVT Sekolah Vokasi IPB University",
     year: "2025",
     placement: "2nd Place",
-    description: "Developed a concept for an application to track rabies-infected animals and proposed a technology-driven solution to support rabies monitoring and prevention.",
+    description: "Developed an application concept for rabies monitoring and prevention.",
+    contribution: "I developed the concept of the application and wrote the essay.",
     file: "",
     fileType: "",
   },
@@ -15,7 +16,8 @@ export const awards: Award[] = [
     event: "IIO Business Plan Competition 2025",
     year: "2025",
     placement: "Finalist",
-    description: "Contributed to a business plan focused on identifying opportunities, designing a viable solution and presenting the concept to evaluators.",
+    description: "Developed a business plan around a product idea.",
+    contribution: "I conceived the idea from the start: the problem to solve and the product that solves it.",
     file: "",
     fileType: "",
   },
@@ -24,7 +26,8 @@ export const awards: Award[] = [
     event: "ICAN 2025",
     year: "2025",
     placement: "Semifinalist",
-    description: "Reached the semifinal stage by contributing to a business plan that addressed a market need and proposed a feasible solution.",
+    description: "Reached the semifinal with the Waspada business plan.",
+    contribution: "I developed and refined the IoT technology concept behind Waspada.",
     file: "",
     fileType: "",
   },
@@ -33,7 +36,8 @@ export const awards: Award[] = [
     event: "Pendikar IPB University",
     year: "2024",
     placement: "3rd Place",
-    description: "Contributed an original business idea and developed an innovative solution to a relevant problem.",
+    description: "Developed an original idea from the problem to the product.",
+    contribution: "I designed the idea myself, from the problem to solve to the product.",
     file: "",
     fileType: "",
   },
