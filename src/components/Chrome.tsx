@@ -90,7 +90,7 @@ function SocialIcon({ icon }: { icon: string }) {
  return <svg viewBox="0 0 24 24" aria-hidden="true">{icon === "instagram" ? <><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="2.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="2.5"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></> : <path d={paths[icon]} fill="currentColor" fillRule="evenodd"/>}</svg>;
 }
 
-export function StoryModal({ open, label, onClose, children }: { open: boolean; label: string; onClose: () => void; children: ReactNode }) {
+export function StoryModal({ open, label, onClose, children, panelClassName = "" }: { open: boolean; label: string; onClose: () => void; children: ReactNode; panelClassName?: string }) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const scrollEffects = useScrollEffects();
   useEffect(() => {
@@ -128,7 +128,7 @@ export function StoryModal({ open, label, onClose, children }: { open: boolean; 
   if (!open) return null;
   return createPortal(
     <div role="dialog" aria-modal="true" aria-label={label} className="story-modal-backdrop" onClick={onClose}>
-      <div ref={dialogRef} tabIndex={-1} data-lenis-prevent className="story-modal-panel" onClick={(event) => event.stopPropagation()}>
+      <div ref={dialogRef} tabIndex={-1} data-lenis-prevent className={`story-modal-panel ${panelClassName}`} onClick={(event) => event.stopPropagation()}>
         <Button variant="ghost" className="story-modal-close" onClick={onClose} aria-label="Close dialog">Close</Button>
         {children}
       </div>

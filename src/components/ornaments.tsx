@@ -127,13 +127,22 @@ export function Chapter({ n, title, id, children, numberless = false }: { n: str
 export function SafeImage({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
   const [failed, setFailed] = useState(false);
   useEffect(() => {
-    setFailed(false);
+    let active = true;
+    setFailed(!src);
+    if (!src) return;
+    const image = new Image();
+    image.onload = () => { if (active) setFailed(image.naturalWidth === 0); };
+    image.onerror = () => { if (active) setFailed(true); };
+    image.src = src;
+    return () => {
+      active = false;
+      image.onload = null;
+      image.onerror = null;
+    };
   }, [src]);
   if (failed || !src)
     return (
-      <div role="img" aria-label={alt} className={`flex items-center justify-center bg-gradient-to-br from-blush via-cream to-rose p-3 text-center text-xs text-plum/70 ${className}`}>
-        {src.split("/").pop() || "image"}
-      </div>
+      <div role="img" aria-label={alt} className={`bg-gradient-to-br from-blush via-cream to-rose ${className}`} />
     );
   return <img src={src} alt={alt} loading="lazy" onLoad={() => setFailed(false)} onError={() => setFailed(true)} className={`object-cover ${className}`} />;
 }

@@ -4,7 +4,8 @@ export const profile = {
   campus: "IPB University, Software Engineering",
   base: "Bogor, West Java",
   photo: "/images/erisa.png",
-  cvUrl: "https://drive.google.com/file/d/1dt1CJ4px4-qyR2Gu5IbdO6TgLBzgSTRv/view?usp=drive_link",
+  cvIndonesiaUrl: "https://drive.google.com/file/d/1IqZH6y8SwulA0EUxq94IvnOo-qYPU_V_/view?usp=sharing",
+  cvEnglishUrl: "https://drive.google.com/file/d/1JVW4MdV34BVFDVFHFS2276_DXwEpI6gn/view?usp=drive_link",
   email: "TODO@email.com",
   location: "Bogor, West Java",
   links: {

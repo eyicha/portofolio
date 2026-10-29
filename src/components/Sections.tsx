@@ -207,7 +207,6 @@ export function PublicationChapter() {
             </li>
           ))}
         </ul>
-        <Link to="/publications" className="home-publications-details">Publication details</Link>
       </div>
     </Chapter>
   );
@@ -335,7 +334,7 @@ function ProjectViewer({ project, onClose }: { project: Project; onClose: () => 
   const canOpenCaseStudy = isConfiguredUrl(project.slug);
   const metadata = [project.role, project.year].filter(Boolean).join(" | ");
   return (
-    <StoryModal open label={`Project: ${project.title}`} onClose={onClose}>
+    <StoryModal open label={`Project: ${project.title}`} onClose={onClose} panelClassName="project-story-modal">
       <h3 className="story-modal-heading">{project.title}</h3>
       {metadata && <p className="story-modal-copy">{metadata}</p>}
       {project.summary && <p className="mt-3">{project.summary}</p>}
