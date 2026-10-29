@@ -114,7 +114,7 @@ export function useReveal<T extends HTMLElement>() {
 
 export function Chapter({ n, title, id, children, numberless = false }: { n: string; title: string; id?: string; children: ReactNode; numberless?: boolean }) {
   const ref = useReveal<HTMLElement>();
-  const number = ({ One: "1", Two: "2", Three: "3", Four: "4", Five: "5", Six: "6", Seven: "7" } as Record<string, string>)[n] ?? n;
+  const number = ({ One: "1", Two: "2", Three: "3", Four: "4", Five: "5", Six: "6", Seven: "7", Eight: "8" } as Record<string, string>)[n] ?? n;
   return <section ref={ref} id={id} data-page-number={number} className="chapter-page page-in">
     <span className="chapter-sheet-front" aria-hidden="true" />
     <span className="chapter-inner-border" aria-hidden="true" />

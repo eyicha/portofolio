@@ -5,7 +5,7 @@ import { howIWorkSteps } from "@/data/how-i-work";
 import { stack } from "@/data/stack";
 import { projects, type Project } from "@/data/projects";
 import { awards, type Award } from "@/data/awards";
-import { publications, type Publication } from "@/data/publications";
+import { publications } from "@/data/publications";
 import { certs, type Cert } from "@/data/certs";
 import { Chapter, SafeImage, Star, WaxSeal } from "./ornaments";
 import { StoryModal } from "./Chrome";
@@ -103,7 +103,7 @@ export function Stack() {
 
 export function HowIWork() {
   return (
-    <Chapter n="Four" title="How I Work" numberless>
+    <Chapter n="Four" title="How I Work">
       <p className="how-tagline" data-scroll-text>Skills start a project. Habits finish it.</p>
       <div className="how-flower-intro">
         <p className="how-flower-letters" aria-hidden="true">{"FLOWER".split("").map((letter, index) => <span key={`${letter}-${index}`}>{letter}</span>)}</p>
@@ -157,7 +157,7 @@ export function ProjectCard({ p, onOpen }: { p: Project; onOpen: () => void }) {
             {p.year && <span className="font-display italic text-mauve">{p.year}</span>}
           </div>
           {p.role && <p className="text-sm">{p.role}</p>}
-          {p.status && <span className="mt-2 inline-flex rounded-full border border-foil bg-cream px-3 py-1 text-xs text-deep-rose">{p.status}</span>}
+          {p.status?.toLowerCase() === "in progress" && <span className="mt-2 inline-flex rounded-full border border-foil bg-cream px-3 py-1 text-xs text-deep-rose">{p.status}</span>}
           {p.stack.length > 0 && <ul className="mt-3 flex flex-wrap gap-2">
             {p.stack.map((s, i) => <li key={i} className="rounded-full bg-blush px-3 py-0.5 text-xs">{s}</li>)}
           </ul>}
@@ -184,14 +184,31 @@ export function Honors() {
       <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {awards.map((award, index) => <AwardCard key={index} award={award} onOpen={() => setSelected(award)} />)}
       </ul>
-      <section className="publications-section" aria-labelledby="publications-heading">
-        <h3 id="publications-heading" className="font-display text-2xl font-semibold text-deep-rose"><MixedTitle text="Publications" /></h3>
-        <p className="publications-subtitle">Research and writing</p>
-        <ul className="publication-grid">
-          {publications.map((publication) => <PublicationCard key={publication.title} publication={publication} />)}
-        </ul>
-      </section>
       {selected && <AwardViewer award={selected} onClose={() => setSelected(null)} />}
+    </Chapter>
+  );
+}
+
+export function PublicationChapter() {
+  return (
+    <Chapter n="Seven" title="Publications" id="publications">
+      <div className="home-publications">
+        <p className="home-publications-intro">Research and writing collected along the way.</p>
+        <ul className="home-publication-list">
+          {publications.map((publication) => (
+            <li key={publication.title} className="home-publication-item">
+              <span className="home-publication-tape" aria-hidden="true" />
+              <article className="home-publication-paper">
+                <span className="home-publication-kind">{publication.kind}</span>
+                <h3>{publication.title}</h3>
+                <p>{[publication.venue, publication.date].filter(Boolean).join(" · ")}</p>
+                {publication.url && <a href={publication.url} target="_blank" rel="noopener noreferrer">View publication <span aria-hidden="true">↗</span></a>}
+              </article>
+            </li>
+          ))}
+        </ul>
+        <Link to="/publications" className="home-publications-details">Publication details</Link>
+      </div>
     </Chapter>
   );
 }
@@ -215,6 +232,10 @@ function AwardCard({ award, onOpen }: { award: Award; onOpen: () => void }) {
           <p className="mt-1 text-sm">{[award.event, award.year].filter(Boolean).join(" | ")}</p>
           {award.description && <p className="award-description" data-scroll-text>{award.description}</p>}
           {award.contribution && <p className="award-contribution">{award.contribution}</p>}
+          <span className="award-view-hint">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" /><circle cx="12" cy="12" r="2.5" /></svg>
+            {award.file ? "Click to view proof" : "Click for details"}
+          </span>
         </div>
       </div>
     </li>
@@ -224,7 +245,7 @@ function AwardCard({ award, onOpen }: { award: Award; onOpen: () => void }) {
 export function Certs() {
   const [selected, setSelected] = useState<Cert | null>(null);
   return (
-    <Chapter n="Seven" title="Certifications">
+    <Chapter n="Eight" title="Certifications">
       <ul className="certificate-grid">
         {certs.map((cert) => (
           <CertificateTicket key={cert.image} cert={cert} onView={() => setSelected(cert)} />
@@ -288,21 +309,6 @@ function AwardViewer({ award, onClose }: { award: Award; onClose: () => void }) 
       {award.contribution && <p className="story-modal-copy award-modal-contribution">{award.contribution}</p>}
       <PortfolioFile file={award.file} fileType={award.fileType} title={award.title} />
     </StoryModal>
-  );
-}
-
-function PublicationCard({ publication }: { publication: Publication }) {
-  const glowRef = useGlowCard<HTMLDivElement>();
-  return (
-    <li className="min-w-0" data-scroll-reveal="rise">
-      <article ref={glowRef} className="publication-card glow-card">
-        <h4 className="font-display text-lg font-semibold text-deep-rose">{publication.title}</h4>
-        {[publication.venue, publication.date].filter(Boolean).length > 0 && <p className="publication-meta">{[publication.venue, publication.date].filter(Boolean).join(" | ")}</p>}
-        {publication.role && <p className="publication-role">{publication.role}</p>}
-        {publication.description && <p className="publication-description">{publication.description}</p>}
-        {publication.url && <a href={publication.url} target="_blank" rel="noopener noreferrer" className="publication-read">Read</a>}
-      </article>
-    </li>
   );
 }
 

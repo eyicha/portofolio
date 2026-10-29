@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublicationsRouteImport } from './routes/publications'
 import { Route as ProjectSlugRouteImport } from './routes/project.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicationsRoute = PublicationsRouteImport.update({
+  id: '/publications',
+  path: '/publications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectSlugRoute = ProjectSlugRouteImport.update({
@@ -25,27 +31,31 @@ const ProjectSlugRoute = ProjectSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/publications': typeof PublicationsRoute
   '/project/$slug': typeof ProjectSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/publications': typeof PublicationsRoute
   '/project/$slug': typeof ProjectSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/publications': typeof PublicationsRoute
   '/project/$slug': typeof ProjectSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/project/$slug'
+  fullPaths: '/' | '/publications' | '/project/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/project/$slug'
-  id: '__root__' | '/' | '/project/$slug'
+  to: '/' | '/publications' | '/project/$slug'
+  id: '__root__' | '/' | '/publications' | '/project/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PublicationsRoute: typeof PublicationsRoute
   ProjectSlugRoute: typeof ProjectSlugRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/publications': {
+      id: '/publications'
+      path: '/publications'
+      fullPath: '/publications'
+      preLoaderRoute: typeof PublicationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/project/$slug': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PublicationsRoute: PublicationsRoute,
   ProjectSlugRoute: ProjectSlugRoute,
 }
 export const routeTree = rootRouteImport

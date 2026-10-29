@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState, type ReactNode, type RefObject } from "react";
 
 type MotionMode = "full" | "reduced";
-type MotionContextValue = { mode: MotionMode; ready: boolean; toggle: () => void };
+type MotionContextValue = { mode: MotionMode; ready: boolean };
 type ScrollOptions = { maxDrift?: number; parallaxSpeed?: number; trackPage?: boolean; sourceRef?: RefObject<HTMLElement | null>; glide?: boolean; direction?: 1 | -1; wake?: boolean };
 
-const MotionContext = createContext<MotionContextValue>({ mode: "full", ready: false, toggle: () => undefined });
+const MotionContext = createContext<MotionContextValue>({ mode: "full", ready: false });
 
 export function MotionProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<MotionMode>("full");
@@ -21,24 +21,13 @@ export function MotionProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const toggle = () => {
-    const next = mode === "full" ? "reduced" : "full";
-    setMode(next);
-    try {
-      localStorage.setItem("erisa-motion-mode", next);
-    } catch {
-      setMode(next);
-    }
-  };
-
   useEffect(() => {
     document.documentElement.dataset.motion = mode;
   }, [mode]);
 
   return (
-    <MotionContext.Provider value={{ mode, ready, toggle }}>
+    <MotionContext.Provider value={{ mode, ready }}>
       {children}
-      <MotionToggle />
     </MotionContext.Provider>
   );
 }
@@ -127,11 +116,3 @@ export function useScrollProgress<T extends HTMLElement>(ref: RefObject<T | null
   return progress;
 }
 
-function MotionToggle() {
-  const { mode, toggle } = useMotionSetting();
-  return (
-    <button type="button" className="motion-toggle" aria-label="Toggle animations" aria-pressed={mode === "full"} onClick={toggle}>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10Z" fill="currentColor" /><circle cx="19" cy="5" r="1.4" fill="var(--foil-light)" /></svg>
-    </button>
-  );
-}

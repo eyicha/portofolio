@@ -6,8 +6,8 @@ export const certs: Cert[] = [
     issuer: "Gemini",
     year: "2026",
     date: "Issued Sep 2026, expires Sep 2029",
-    image: "/images/certs/1.png",
-    file: "/images/certs/1.png",
+    image: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793245465/gemini.jpg",
+    file: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793245465/gemini.jpg",
     fileType: "image",
   },
   {
@@ -17,8 +17,8 @@ export const certs: Cert[] = [
     date: "Issued Sep 2026",
     credentialId: "think-cell CP",
     note: "Earned after following the DWDG BCC SEA webinar",
-    image: "/images/certs/2.png",
-    file: "/images/certs/2.png",
+    image: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793245467/thinkcel.jpg",
+    file: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793245467/thinkcel.jpg",
     fileType: "image",
   },
   {
@@ -26,8 +26,8 @@ export const certs: Cert[] = [
     issuer: "",
     year: "2024",
     date: "August 2024",
-    image: "/images/certs/3.png",
-    file: "/images/certs/3.png",
+    image: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793245408/Screenshot_2026-10-29_104249.png",
+    file: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793245408/Screenshot_2026-10-29_104249.png",
     fileType: "image",
   },
   {
@@ -35,8 +35,8 @@ export const certs: Cert[] = [
     issuer: "",
     year: "2025",
     date: "May 2025",
-    image: "/images/certs/4.png",
-    file: "/images/certs/4.png",
+    image: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793248820/Erisa_Salsabila_1.jpg",
+    file: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793248820/Erisa_Salsabila_1.jpg",
     fileType: "image",
   },
 ];

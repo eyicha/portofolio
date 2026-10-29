@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Erisa Salsabila" },
+      { title: "Portofolio | Erisa Salsabila" },
       { name: "author", content: "Erisa Salsabila" },
     ],
     links: [
@@ -95,7 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600;1,700&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap",
       },
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg?v=20261029-2", type: "image/svg+xml", sizes: "any" },
     ],
     scripts: [{ children: `try {
       if (sessionStorage.getItem("erisa-book-opened") === "1") {

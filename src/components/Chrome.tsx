@@ -13,6 +13,7 @@ const items = [
   ["Stack", "stack"],
   ["Work", "work"],
   ["Honors", "honors"],
+  ["Publications", "publications"],
   ["Contact", "contact"],
 ] as const;
 
