@@ -584,7 +584,8 @@ body:has(.opening-scene){overflow:hidden}body:has(.opening-scene)>:not(.opening-
 .landing-sparkle-dust{border-radius:50%;clip-path:none}
 .landing-sparkles[data-visible="false"] .landing-sparkle{animation-play-state:paused}
 @keyframes landing-sparkle-float{0%{opacity:.2;transform:translateY(0)}50%{opacity:var(--sparkle-peak);transform:translateY(calc(0px - var(--sparkle-half-drift)))}100%{opacity:.2;transform:translateY(calc(0px - var(--sparkle-drift)))} }
-@media(max-width:639px){.landing-sparkle:nth-child(n+19){display:none}}
+@media(max-width:639px){.landing-sparkle:nth-child(n+13){display:none}}
+@media(pointer:coarse){.fairy-cursor-canvas,.fairy-cursor-sprite{display:none}}
 html[data-motion="reduced"] .landing-sparkles .landing-sparkle,.landing-sparkles[data-motion="reduced"] .landing-sparkle{animation:none;opacity:.24;transform:none;will-change:auto}
 @media(prefers-reduced-motion:reduce){.landing-sparkles .landing-sparkle{animation:none;opacity:.24;transform:none;will-change:auto}}
 

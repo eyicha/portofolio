@@ -20,6 +20,7 @@ export function FairyCursor() {
   }, []);
 
   useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
     const element = canvas.current;
     const context = element?.getContext("2d");
     if (!element || !context) return;

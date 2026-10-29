@@ -15,7 +15,7 @@ type LenisController = {
 type GsapApi = typeof import("gsap").gsap;
 type ScrollTriggerApi = typeof import("gsap/ScrollTrigger").ScrollTrigger;
 type SplitTextApi = typeof import("gsap/SplitText").SplitText;
-type ScrollRuntime = { gsap: GsapApi; ScrollTrigger: ScrollTriggerApi; SplitText: SplitTextApi | null; lenis: LenisController };
+type ScrollRuntime = { gsap: GsapApi; ScrollTrigger: ScrollTriggerApi; SplitText: SplitTextApi | null; lenis: LenisController | null };
 type ScrollEffectsValue = { lenis: LenisController | null; acquireScrollLock: () => () => void };
 type TweenHandle = { kill: () => void };
 
@@ -62,6 +62,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
     let refreshTimer: ReturnType<typeof setTimeout> | null = null;
     let resizeTimer: ReturnType<typeof setTimeout> | null = null;
     let introObserver: MutationObserver | null = null;
+    const useNativeScroll = window.matchMedia("(max-width: 767px), (pointer: coarse)").matches;
 
     const scheduleRefresh = (delay = 300) => {
       if (refreshTimer) clearTimeout(refreshTimer);
@@ -79,7 +80,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
     void Promise.all([
       import("gsap"),
       import("gsap/ScrollTrigger"),
-      import("lenis"),
+      useNativeScroll ? Promise.resolve(null) : import("lenis"),
       import("gsap/SplitText").catch(() => null),
     ]).then(([gsapModule, triggerModule, lenisModule, splitModule]) => {
       if (cancelled) return;
@@ -93,22 +94,24 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
       }
       ScrollTrigger.config({ ignoreMobileResize: true });
 
-      const instance = new lenisModule.default({ lerp: 0.08, smoothWheel: true }) as LenisController;
+      const instance = lenisModule ? new lenisModule.default({ lerp: 0.08, smoothWheel: true }) as LenisController : null;
       lenis = instance;
       lenisRef.current = instance;
       updateScrollTrigger = () => ScrollTrigger?.update();
-      instance.on("scroll", updateScrollTrigger);
-      ticker = (time) => instance.raf(time * 1000);
-      gsap.ticker.add(ticker);
-      gsap.ticker.lagSmoothing(0);
-      if (lockCount.current) instance.stop();
+      if (instance) {
+        instance.on("scroll", updateScrollTrigger);
+        ticker = (time) => instance.raf(time * 1000);
+        gsap.ticker.add(ticker);
+        gsap.ticker.lagSmoothing(0);
+        if (lockCount.current) instance.stop();
+      }
 
       onVisibilityChange = () => {
         if (document.hidden) {
-          instance.stop();
+          instance?.stop();
           gsap?.ticker.sleep();
         } else {
-          if (!lockCount.current) instance.start();
+          if (!lockCount.current) instance?.start();
           gsap?.ticker.wake();
           scheduleRefresh(0);
         }
@@ -146,11 +149,11 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
       document.removeEventListener("load", onImageLoad, true);
       if (onVisibilityChange) document.removeEventListener("visibilitychange", onVisibilityChange);
       window.removeEventListener("resize", onResize);
-      if (lenis && gsap && ScrollTrigger) {
-        if (updateScrollTrigger) lenis.off("scroll", updateScrollTrigger);
+      if (gsap && ScrollTrigger) {
+        if (lenis && updateScrollTrigger) lenis.off("scroll", updateScrollTrigger);
         if (ticker) gsap.ticker.remove(ticker);
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-        lenis.destroy();
+        lenis?.destroy();
       }
       if (lenisRef.current === lenis) lenisRef.current = null;
       setRuntime(null);
