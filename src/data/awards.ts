@@ -46,7 +46,7 @@ export const awards: Award[] = [
     event: "Yayasan Alumni Peduli IPB (YAPI)",
     year: "2024",
     placement: "Recipient",
-    description: "Selected for three academic periods, supporting my continued education at IPB University.",
+    description: "Selected for two academic periods, supporting my continued education at IPB University.",
     file: "https://res.cloudinary.com/wibs4rxk/image/upload/v1793249316/yapi.jpg",
     fileType: "image",
   },

@@ -368,7 +368,7 @@ function ProjectPreview({ project, liveUrl }: { project: Project; liveUrl: strin
   return (
     <div className="project-preview">
       {project.demoVideoUrl ? (
-        <video controls playsInline preload="metadata" aria-label={`${project.title} demo video`}>
+        <video key={project.slug} controls playsInline preload="metadata" aria-label={`${project.title} demo video`}>
           <source src={project.demoVideoUrl} type="video/mp4" />
           Your browser does not support video playback.
         </video>
