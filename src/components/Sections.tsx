@@ -89,7 +89,7 @@ export function Stack() {
                 return (
                   <section key={group} className="stack-item-group">
                     <h4 className="stack-group-heading">{group}</h4>
-                    <ul className="stack-skill-list">{items.map((item) => <li key={`${item.label}-${item.short}`} className="stack-skill-chip">{item.label}</li>)}</ul>
+                    <ul className="stack-skill-list">{items.map((item) => <li key={`${item.label}-${item.short}`} className="stack-skill-chip"><span>{item.label}</span>{item.usedIn && <small>Used in: {item.usedIn}</small>}</li>)}</ul>
                   </section>
                 );
               })}
@@ -339,9 +339,9 @@ function ProjectViewer({ project, onClose }: { project: Project; onClose: () => 
       <h3 className="story-modal-heading">{project.title}</h3>
       {metadata && <p className="story-modal-copy">{metadata}</p>}
       {project.summary && <p className="mt-3">{project.summary}</p>}
-      {project.results?.length ? (
+      {project.contributions.length ? (
         <ul className="mt-3 list-none space-y-2">
-          {project.results.slice(0, 2).map((result) => <li key={result} className="flex items-start gap-2"><Star size={10} className="mt-1 shrink-0 text-[var(--foil)]" /><span>{result}</span></li>)}
+          {project.contributions.slice(0, 2).map((contribution) => <li key={contribution} className="flex items-start gap-2"><Star size={10} className="mt-1 shrink-0 text-[var(--foil)]" /><span>{contribution}</span></li>)}
         </ul>
       ) : null}
       {project.stack.length > 0 && <ul className="story-modal-chips">{project.stack.map((item) => <li key={item}>{item}</li>)}</ul>}

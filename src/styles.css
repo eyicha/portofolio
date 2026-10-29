@@ -307,6 +307,8 @@ html[data-motion="reduced"] .glow-card:hover,html[data-motion="reduced"] .glow-c
 .project-preview video{display:block;width:100%;height:100%;object-fit:contain;border:0;background:var(--plum)}
 .project-preview-placeholder{display:grid;width:100%;height:100%;place-items:center;padding:16px;color:var(--deep-rose);font-family:var(--font-display);font-style:italic;text-align:center;overflow-wrap:anywhere;}
 .project-case-study{position:relative;z-index:10;display:grid;max-width:900px;gap:22px;margin:0 auto;padding:34px 22px 76px}
+.project-case-study[data-case-scroll-ready="true"] [data-case-reveal]{--case-scroll-progress:0;opacity:var(--case-scroll-progress);transform:translate3d(0,calc((1 - var(--case-scroll-progress)) * 30px),0) scale(calc(.99 + var(--case-scroll-progress) * .01));filter:blur(calc((1 - var(--case-scroll-progress)) * 4px));will-change:opacity,transform,filter}
+@media(prefers-reduced-motion:reduce){.project-case-study[data-case-scroll-ready="true"] [data-case-reveal]{opacity:1;transform:none;filter:none;will-change:auto}}
 .project-back-link{width:max-content;max-width:100%;color:var(--deep-rose);font-family:var(--font-display);font-size:16px;text-decoration:underline;text-underline-offset:4px}
 .project-case-hero{padding:clamp(24px,5vw,48px);border:1px solid color-mix(in oklab,var(--foil) 72%,transparent);border-radius:24px 24px 12px 12px;background:linear-gradient(145deg,color-mix(in oklab,var(--pearl) 96%,transparent),color-mix(in oklab,var(--cream) 94%,transparent));box-shadow:var(--shadow-paper);text-align:center}
 .project-case-kicker{margin:0;color:var(--mauve);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
@@ -314,10 +316,15 @@ html[data-motion="reduced"] .glow-card:hover,html[data-motion="reduced"] .glow-c
 .project-detail-title .mixed-word{white-space:normal}
 .project-case-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:16px auto 0;color:var(--muted-foreground);font-family:var(--font-display);font-size:15px;font-style:italic}
 .project-case-meta>span:first-child:not(:last-child)::after{margin-left:8px;color:var(--foil);content:"·"}
+.project-role-badge{padding:5px 13px;border:1px solid color-mix(in oklab,var(--foil) 72%,transparent);border-radius:999px;background:color-mix(in oklab,var(--blush) 75%,var(--pearl));color:var(--deep-rose);font-style:normal}
 .project-status{padding:4px 11px;border:1px solid color-mix(in oklab,var(--foil) 70%,transparent);border-radius:999px;background:color-mix(in oklab,var(--pearl) 70%,transparent);font-size:12px;font-style:normal}
 .project-status.is-progress{border-color:color-mix(in oklab,var(--sage) 75%,var(--foil));background:color-mix(in oklab,var(--sage) 20%,var(--pearl));color:var(--plum)}
+.project-timeline{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px 0 0;color:var(--muted-foreground);font-size:13px}
+.project-timeline>span{color:var(--mauve);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
 .project-case-summary{max-width:660px;margin:18px auto 0;color:var(--foreground);font-family:var(--font-display);font-size:clamp(18px,2.4vw,22px);line-height:1.55}
-.project-case-cover{display:block;width:100%;aspect-ratio:16/9;margin-top:26px;border:1px solid color-mix(in oklab,var(--foil) 65%,transparent);border-radius:12px;background:var(--blush);object-fit:cover}
+.project-case-cover-frame{width:100%;aspect-ratio:16/9;margin-top:26px;overflow:hidden;border:1px solid color-mix(in oklab,var(--foil) 65%,transparent);border-radius:12px;background:var(--blush)}
+.project-case-cover{display:block;width:100%;height:100%;object-fit:cover}
+.project-case-stack-label{margin:18px 0 -10px;color:var(--mauve);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
 .project-case-stack{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:18px 0 0;padding:0;list-style:none}
 .project-case-stack li{padding:6px 12px;border:1px solid color-mix(in oklab,var(--foil) 48%,transparent);border-radius:999px;background:color-mix(in oklab,var(--blush) 75%,var(--pearl));color:var(--plum);font-size:12px;line-height:1.3}
 .project-case-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:22px}
@@ -331,6 +338,12 @@ html[data-motion="reduced"] .glow-card:hover,html[data-motion="reduced"] .glow-c
 .project-result-list{display:grid;gap:12px;margin:0;padding:0;list-style:none}
 .project-result-list li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;align-items:start}
 .project-result-list svg{margin-top:6px;color:var(--foil)}
+.project-process-list{display:grid;gap:14px;margin:0;padding:0;list-style:none;counter-reset:process}
+.project-process-list li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:13px;align-items:start;padding:13px 15px;border:1px solid color-mix(in oklab,var(--foil) 40%,transparent);border-radius:10px;background:color-mix(in oklab,var(--pearl) 55%,transparent);line-height:1.6}
+.project-process-number{display:grid;width:30px;height:30px;place-items:center;border:1px solid var(--foil);border-radius:50%;color:var(--deep-rose);font-family:var(--font-display);font-size:15px;font-style:italic}
+.project-role-list{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.project-role-list li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;align-items:start;line-height:1.65}
+.project-role-list svg{margin-top:6px;color:var(--foil)}
 .project-feature-list{display:flex;flex-wrap:wrap;gap:9px;margin:0;padding:0;list-style:none}
 .project-feature-list li{padding:7px 12px;border:1px solid color-mix(in oklab,var(--foil) 50%,transparent);border-radius:8px;background:color-mix(in oklab,var(--pearl) 75%,transparent);font-size:14px}
 .project-section .project-preview{margin-top:0;border-radius:10px}
@@ -339,7 +352,8 @@ html[data-motion="reduced"] .glow-card:hover,html[data-motion="reduced"] .glow-c
 .project-screenshot-button img{display:block;width:100%;object-fit:cover;transition:transform .35s}.project-screenshot-button:hover img{transform:scale(1.025)}
 .project-next{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:20px 24px;border:1px solid color-mix(in oklab,var(--foil) 58%,transparent);border-radius:14px;background:color-mix(in oklab,var(--pearl) 78%,transparent)}
 .project-next>span{color:var(--mauve);font-size:11px;letter-spacing:.13em;text-transform:uppercase}.project-next>a{color:var(--deep-rose);font-family:var(--font-display);font-size:20px;text-decoration:none}.project-next>a:hover{text-decoration:underline;text-underline-offset:4px}
-@media(max-width:600px){.project-case-study{gap:16px;padding:24px 15px 56px}.project-case-hero{padding:28px 18px;border-radius:18px 18px 10px 10px}.project-detail-title{font-size:clamp(34px,10vw,46px)}.project-case-cover{margin-top:20px;border-radius:9px}.project-section{padding:20px 17px}.project-section-body{font-size:15px}.project-screenshot-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.project-process-list li{grid-template-columns:32px minmax(0,1fr);gap:10px;padding:11px}.project-process-number{width:26px;height:26px}}
+@media(max-width:600px){.project-case-study{gap:16px;padding:24px 15px 56px}.project-case-hero{padding:28px 18px;border-radius:18px 18px 10px 10px}.project-detail-title{font-size:clamp(34px,10vw,46px)}.project-case-cover-frame{margin-top:20px;border-radius:9px}.project-section{padding:20px 17px}.project-section-body{font-size:15px}.project-screenshot-grid{grid-template-columns:minmax(0,1fr)}}
 @media(hover:none){.glow-card:hover:not(.is-tap-glow){transform:none;border-color:var(--glow-rest-border);box-shadow:var(--glow-rest-shadow)}}
 @media(min-width:768px){.stack-groups{grid-template-columns:repeat(2,minmax(0,1fr))}.stack-tile-grid{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}.stack-tile{width:96px;height:104px;justify-content:center}.tech-logo,.tech-logo-local,.tech-logo-svg,.tech-logo-monogram{width:36px;height:36px}}
 @media(min-width:1024px){.stack-area-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stack-everyday-tools{grid-column:1/-1}}

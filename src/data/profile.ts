@@ -4,7 +4,7 @@ export const profile = {
   campus: "IPB University, Software Engineering",
   base: "Bogor, West Java",
   photo: "/images/erisa.png",
-  cvUrl: "#TODO-cv-link",
+  cvUrl: "https://docs.google.com/document/d/1v_B9cVF6KeIfxaLOybAZC7EpzZQHVVMV/edit?usp=sharing&ouid=101435442562213745741&rtpof=true&sd=true",
   email: "TODO@email.com",
   location: "Bogor, West Java",
   links: {

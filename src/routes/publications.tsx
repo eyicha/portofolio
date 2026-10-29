@@ -23,7 +23,7 @@ function PublicationsPage() {
           <p className="publication-archive-intro">Research and writing collected along the way.</p>
           <ol className="publication-archive-list">
             {publications.map((publication) => (
-              <li key={publication.title} className="publication-archive-item">
+              <li key={publication.title} className="publication-archive-item" data-scroll-reveal="rise">
                 <article>
                   <p className="publication-archive-kind">{publication.kind ?? "Publication"}</p>
                   <h3>{publication.title}</h3>

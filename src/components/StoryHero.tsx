@@ -37,6 +37,6 @@ export function StoryHero() {
     <RoseCluster className="hero-roses roses-left" variant="foreground" />
     <RoseCluster className="hero-roses roses-right" flip />
     <div className="petal-layer" aria-hidden="true">{Array.from({ length: 7 }, (_, i) => <Petals key={i} variant={i % 2 ? "curl" : "round"} className={`falling-petal petal-${i}`} animate />)}</div>
-    <div className="hero-actions"><Button asChild className="ribbon-tag"><a href="#work"><MixedTitle text="View Work" /></a></Button><Button asChild variant="outline" className="ribbon-tag ribbon-light"><a href={profile.cvUrl}><MixedTitle text="Download CV" /></a></Button></div>
+    <div className="hero-actions"><Button asChild className="ribbon-tag"><a href="#work"><MixedTitle text="View Work" /></a></Button><Button asChild variant="outline" className="ribbon-tag ribbon-light"><a href={profile.cvUrl} target="_blank" rel="noopener noreferrer"><MixedTitle text="Open CV" /></a></Button></div>
   </section>;
 }

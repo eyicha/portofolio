@@ -1,4 +1,4 @@
-// TODO: remove anything I have not used
+// Existing stack and tools shelves
 export type StackItem = { label: string; short: string; group: string };
 
 export const stack: { shelf: string; items: StackItem[] }[] = [
